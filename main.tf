@@ -261,8 +261,10 @@ resource "routeros_ip_service" "disabled_services" {
 
 # CLOUD/DDNS CONFIGURATION
 resource "routeros_ip_cloud" "cloud_settings" {
-  ddns_enabled     = var.cloud_ddns_enabled
-  back_to_home_vpn = var.cloud_back_to_home_vpn
+  back_to_home_vpn     = var.routeros_ip_cloud.back_to_home_vpn
+  ddns_enabled         = var.routeros_ip_cloud.ddns_enabled
+  ddns_update_interval = var.routeros_ip_cloud.ddns_update_interval
+  update_time          = var.routeros_ip_cloud.update_time
 }
 
 # CONNECTION TRACKING

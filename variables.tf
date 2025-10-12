@@ -180,16 +180,20 @@ variable "services_to_disable" {
 }
 
 # CLOUD/DDNS CONFIGURATION
-variable "cloud_back_to_home_vpn" {
-  description = "Enable back-to-home VPN"
-  type        = string
-  default     = "enabled"
-}
-
-variable "cloud_ddns_enabled" {
-  description = "Enable Cloud DDNS"
-  type        = string
-  default     = "yes"
+variable "routeros_ip_cloud" {
+  description = "Cloud/DDNS configuration"
+  type = object({
+    back_to_home_vpn     = string
+    ddns_enabled         = string
+    ddns_update_interval = string
+    update_time          = bool
+  })
+  default = {
+    back_to_home_vpn     = "enabled"
+    ddns_enabled         = "yes"
+    ddns_update_interval = "5m"
+    update_time          = true
+  }
 }
 
 # CONNECTION TRACKING

@@ -107,8 +107,6 @@ No modules.
 | <a name="input_api_port"></a> [api\_port](#input\_api\_port) | RouterOS API port | `number` | `8291` | no |
 | <a name="input_blackbox_exporter_host"></a> [blackbox\_exporter\_host](#input\_blackbox\_exporter\_host) | Blackbox Exporter host IP (MSI Cubi) | `string` | n/a | yes |
 | <a name="input_blackbox_exporter_port"></a> [blackbox\_exporter\_port](#input\_blackbox\_exporter\_port) | Blackbox Exporter port for ISP monitoring | `number` | `9115` | no |
-| <a name="input_cloud_back_to_home_vpn"></a> [cloud\_back\_to\_home\_vpn](#input\_cloud\_back\_to\_home\_vpn) | Enable back-to-home VPN | `string` | `"enabled"` | no |
-| <a name="input_cloud_ddns_enabled"></a> [cloud\_ddns\_enabled](#input\_cloud\_ddns\_enabled) | Enable Cloud DDNS | `string` | `"yes"` | no |
 | <a name="input_connection_tracking_udp_timeout"></a> [connection\_tracking\_udp\_timeout](#input\_connection\_tracking\_udp\_timeout) | UDP connection tracking timeout | `string` | `"10s"` | no |
 | <a name="input_container"></a> [container](#input\_container) | Container configuration | <pre>object({<br>    veth_name     = string<br>    ip            = string<br>    gateway       = string<br>    image         = string<br>    start_on_boot = bool<br>  })</pre> | n/a | yes |
 | <a name="input_dhcp"></a> [dhcp](#input\_dhcp) | DHCP configuration | <pre>object({<br>    pool_name   = string<br>    pool_start  = string<br>    pool_end    = string<br>    server_name = string<br>  })</pre> | n/a | yes |
@@ -120,6 +118,7 @@ No modules.
 | <a name="input_laptop_ip"></a> [laptop\_ip](#input\_laptop\_ip) | Laptop IP address for firewall allow rule | `string` | n/a | yes |
 | <a name="input_laptop_mac"></a> [laptop\_mac](#input\_laptop\_mac) | Laptop MAC address for firewall allow rule | `string` | n/a | yes |
 | <a name="input_mikrotik"></a> [mikrotik](#input\_mikrotik) | MikroTik connection configuration | <pre>object({<br>    host     = string<br>    username = string<br>    password = string<br>    insecure = bool<br>  })</pre> | n/a | yes |
+| <a name="input_routeros_ip_cloud"></a> [routeros\_ip\_cloud](#input\_routeros\_ip\_cloud) | Cloud/DDNS configuration | <pre>object({<br>    back_to_home_vpn     = string<br>    ddns_enabled         = string<br>    ddns_update_interval = string<br>    update_time          = bool<br>  })</pre> | <pre>{<br>  "back_to_home_vpn": "enabled",<br>  "ddns_enabled": "yes",<br>  "ddns_update_interval": "5m",<br>  "update_time": true<br>}</pre> | no |
 | <a name="input_rpi_zero_ip"></a> [rpi\_zero\_ip](#input\_rpi\_zero\_ip) | Raspberry Pi Zero IP address (ISP monitoring device) | `string` | n/a | yes |
 | <a name="input_services_to_disable"></a> [services\_to\_disable](#input\_services\_to\_disable) | Map of services to disable with their port numbers | <pre>map(object({<br>    port    = number<br>    comment = string<br>  }))</pre> | <pre>{<br>  "ftp": {<br>    "comment": "FTP service",<br>    "port": 21<br>  },<br>  "telnet": {<br>    "comment": "Telnet service",<br>    "port": 23<br>  },<br>  "www": {<br>    "comment": "HTTP web service",<br>    "port": 80<br>  }<br>}</pre> | no |
 | <a name="input_snmp_enabled"></a> [snmp\_enabled](#input\_snmp\_enabled) | Enable SNMP monitoring | `bool` | `true` | no |
