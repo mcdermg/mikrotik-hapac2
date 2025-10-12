@@ -1,4 +1,25 @@
-# mikrotik-hapac2
+# Mikrotik hAP ac2
+
+## Bootstrap
+The process for resetting and allowing this IaC to be able to run is as follows:
+
+1. `/system reset-configuration no-defaults=yes skip-backup=yes`
+2. Connect RJ45 to the hAP ac2 via ether2-4
+3. Connect via WinBox using neighbors and MAC address
+4. `/user add name=gary group=full password=**********`
+5. `/ip service enable api`
+6. `/ip address add address=192.168.0.98/24 interface=ether1`
+7. `/ip route add gateway=192.168.0.1`
+8. `ssh-keygen -f "/home/gary/.ssh/known_hosts" -R "192.168.0.98"`
+9. ssh to thr router via `ssh gary@xxx.xxx.x.xx`
+10. `/user set admin disabled=yes`
+11. Import existing resources into Terraform state:
+```bash
+terraform import routeros_system_user.gary "*1"
+terraform import routeros_ip_address.wan_address "*1"
+```
+12. `terraform plan` (should show no changes if imports worked correctly)
+13. `terraform apply`
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -52,7 +73,6 @@ No modules.
 | [routeros_ip_service.disabled_services](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/ip_service) | resource |
 | [routeros_snmp.snmp_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/snmp) | resource |
 | [routeros_system_clock.timezone](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/system_clock) | resource |
-| [routeros_system_user.gary](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/system_user) | resource |
 
 ## Inputs
 

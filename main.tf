@@ -22,11 +22,11 @@ resource "routeros_snmp" "snmp_settings" {
 }
 
 # USER MANAGEMENT
-resource "routeros_system_user" "gary" {
-  name     = var.mikrotik_username
-  group    = "full"
-  password = var.mikrotik_password
-}
+#resource "routeros_system_user" "gary" {
+#  name     = var.mikrotik_username
+#  group    = "full"
+#  password = var.mikrotik_password
+#}
 
 # Note: Disabling admin user should be done manually after verifying gary user works
 # resource "routeros_user" "admin_disabled" {
@@ -142,7 +142,6 @@ resource "routeros_ip_firewall_filter" "allow_established_related" {
   action           = "accept"
   connection_state = "established,related"
   comment          = "Allow established and related connections"
-  place_before     = 0
 }
 
 resource "routeros_ip_firewall_filter" "allow_laptop_mac" {
