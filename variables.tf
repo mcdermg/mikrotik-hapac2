@@ -1,14 +1,13 @@
 # MIKROTIK CONNECTION
 variable "mikrotik_host" {
-  description = "MikroTik API endpoint URL"
+  description = "MikroTik API endpoint with port"
   type        = string
-  default     = "https://192.168.0.98"
 }
+
 
 variable "mikrotik_username" {
   description = "MikroTik username for authentication"
   type        = string
-  default     = "gary"
   sensitive   = true
 }
 

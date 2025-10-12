@@ -22,7 +22,7 @@ resource "routeros_snmp" "snmp_settings" {
 }
 
 # USER MANAGEMENT
-resource "routeros_user" "gary" {
+resource "routeros_system_user" "gary" {
   name     = var.mikrotik_username
   group    = "full"
   password = var.mikrotik_password
@@ -49,7 +49,7 @@ resource "routeros_interface_bridge_port" "lan_ports" {
 # VETH INTERFACE FOR CONTAINER
 resource "routeros_interface_veth" "veth_container" {
   name    = var.container_veth_name
-  address = var.container_ip
+  address = [var.container_ip]
   gateway = var.container_gateway
 }
 
@@ -267,7 +267,8 @@ resource "routeros_ip_firewall_filter" "allow_wan_subnet_forward" {
 resource "routeros_ip_service" "disabled_services" {
   for_each = var.services_to_disable
   
-  numbers  = [each.value.port]
+  numbers  = each.key
+  port     = each.value.port
   disabled = true
 }
 
