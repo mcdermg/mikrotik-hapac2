@@ -27,7 +27,23 @@ terraform import routeros_ip_address.wan_address "*1"
 There appears to be an issue with [container_config](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/container_config)as the `ram_high` element generates an error on any apply.
 
 ```
+│ Error: from RouterOS device: unknown parameter ram-high
+│
+│   with routeros_container_config.registry,
+│   on main.tf line 290, in resource "routeros_container_config" "registry":
+│  290: resource "routeros_container_config" "registry" {
+│
+```
 
+The provider has an [example](https://github.com/terraform-routeros/terraform-provider-routeros/blob/main/examples/resources/routeros_container_config/resource.tf) of:
+
+```
+resource "routeros_container_config" "config" {
+  registry_url = "https://registry-1.docker.io"
+  ram_high     = "0"
+  tmpdir       = "/usb1-part1/containers/tmp"
+  layer_dir    = "/usb1-part1/containers/layers"
+}
 ```
 
 <!-- BEGIN_TF_DOCS -->

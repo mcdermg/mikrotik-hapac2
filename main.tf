@@ -291,7 +291,7 @@ resource "routeros_ip_firewall_connection_tracking" "connection_tracking" {
 #  registry_url = var.container_registry_url
 #  tmpdir       = "usb1-part1/pull"
 #  layer_dir    = "usb1-part1/layers"
-#  #ram_high     = "0"
+#  ram_high     = "0"
 #  #memory-high   = "0"
 #  depends_on = [
 #    #routeros_file.container_pull_dir,
