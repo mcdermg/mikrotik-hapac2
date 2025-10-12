@@ -3,13 +3,13 @@
 locals {
   # Extract IP without CIDR for use in configurations
   lan_gateway_ip = split("/", var.lan_gateway)[0]
-  
+
   # DHCP pool range
   dhcp_pool_range = "${var.dhcp_pool_start}-${var.dhcp_pool_end}"
-  
+
   # Formatted ports for firewall rules
-  ssh_api_ports      = "${var.ssh_port},${var.api_port}"
-  http_https_ports   = "${var.http_port},${var.https_port}"
+  ssh_api_ports    = "${var.ssh_port},${var.api_port}"
+  http_https_ports = "${var.http_port},${var.https_port}"
 }
 
 # SYSTEM CONFIGURATION
@@ -41,7 +41,7 @@ resource "routeros_interface_bridge" "bridge_lan" {
 
 resource "routeros_interface_bridge_port" "lan_ports" {
   for_each = toset(var.lan_bridge_ports)
-  
+
   bridge    = routeros_interface_bridge.bridge_lan.name
   interface = each.value
 }
@@ -79,8 +79,8 @@ resource "routeros_ip_address" "lan_address" {
 
 # ROUTING
 resource "routeros_ip_route" "default_route" {
-  gateway  = var.wan_gateway
-  comment  = "Default route to ISP gateway"
+  gateway = var.wan_gateway
+  comment = "Default route to ISP gateway"
   depends_on = [
     routeros_ip_address.wan_address
   ]
@@ -99,10 +99,10 @@ resource "routeros_ip_pool" "lan_pool" {
 }
 
 resource "routeros_ip_dhcp_server" "dhcp_lan" {
-  name          = var.dhcp_server_name
-  interface     = routeros_interface_bridge.bridge_lan.name
-  address_pool  = routeros_ip_pool.lan_pool.name
-  disabled      = false
+  name         = var.dhcp_server_name
+  interface    = routeros_interface_bridge.bridge_lan.name
+  address_pool = routeros_ip_pool.lan_pool.name
+  disabled     = false
   depends_on = [
     routeros_ip_pool.lan_pool,
     routeros_interface_bridge.bridge_lan
@@ -121,7 +121,7 @@ resource "routeros_ip_dhcp_server_network" "lan_network" {
 # DHCP SERVER LEASES (Static assignments)
 resource "routeros_ip_dhcp_server_lease" "static_leases" {
   for_each = var.static_leases
-  
+
   address     = each.value.ip_address
   mac_address = each.value.mac_address
   comment     = each.value.comment
@@ -138,11 +138,11 @@ resource "routeros_ip_firewall_nat" "masquerade" {
 
 # FIREWALL FILTER RULES (In exact order from config)
 resource "routeros_ip_firewall_filter" "allow_established_related" {
-  chain             = "input"
-  action            = "accept"
-  connection_state  = "established,related"
-  comment           = "Allow established and related connections"
-  place_before      = 0
+  chain            = "input"
+  action           = "accept"
+  connection_state = "established,related"
+  comment          = "Allow established and related connections"
+  place_before     = 0
 }
 
 resource "routeros_ip_firewall_filter" "allow_laptop_mac" {
@@ -266,7 +266,7 @@ resource "routeros_ip_firewall_filter" "allow_wan_subnet_forward" {
 # IP SERVICES CONFIGURATION
 resource "routeros_ip_service" "disabled_services" {
   for_each = var.services_to_disable
-  
+
   numbers  = each.key
   port     = each.value.port
   disabled = true
@@ -285,10 +285,10 @@ resource "routeros_ip_firewall_connection_tracking" "connection_tracking" {
 
 # CONTAINER CONFIGURATION
 resource "routeros_container" "monitor_isp" {
-  interface      = routeros_interface_veth.veth_container.name
-  remote_image   = var.container_image
-  start_on_boot  = var.container_start_on_boot
-  comment        = "ISP monitoring container with Blackbox Exporter"
+  interface     = routeros_interface_veth.veth_container.name
+  remote_image  = var.container_image
+  start_on_boot = var.container_start_on_boot
+  comment       = "ISP monitoring container with Blackbox Exporter"
   depends_on = [
     routeros_interface_veth.veth_container,
     routeros_interface_bridge_port.veth_container
