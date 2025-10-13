@@ -91,7 +91,9 @@ No modules.
 | [routeros_ip_firewall_filter.allow_rpi_zero_ping](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_rpi_zero_ping_wan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_wan_subnet_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.android_proxmox_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.block_wan_input](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_nat.android_proxmox_nat](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_nat) | resource |
 | [routeros_ip_firewall_nat.masquerade](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_nat) | resource |
 | [routeros_ip_pool.lan_pool](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_pool) | resource |
 | [routeros_ip_route.default_route](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_route) | resource |
@@ -118,6 +120,7 @@ No modules.
 | <a name="input_laptop_ip"></a> [laptop\_ip](#input\_laptop\_ip) | Laptop IP address for firewall allow rule | `string` | n/a | yes |
 | <a name="input_laptop_mac"></a> [laptop\_mac](#input\_laptop\_mac) | Laptop MAC address for firewall allow rule | `string` | n/a | yes |
 | <a name="input_mikrotik"></a> [mikrotik](#input\_mikrotik) | MikroTik connection configuration | <pre>object({<br>    host     = string<br>    username = string<br>    password = string<br>    insecure = bool<br>  })</pre> | n/a | yes |
+| <a name="input_proxmox_port"></a> [proxmox\_port](#input\_proxmox\_port) | Proxmox port | `number` | `8006` | no |
 | <a name="input_routeros_ip_cloud"></a> [routeros\_ip\_cloud](#input\_routeros\_ip\_cloud) | Cloud/DDNS configuration | <pre>object({<br>    back_to_home_vpn     = string<br>    ddns_enabled         = string<br>    ddns_update_interval = string<br>    update_time          = bool<br>  })</pre> | <pre>{<br>  "back_to_home_vpn": "enabled",<br>  "ddns_enabled": "yes",<br>  "ddns_update_interval": "5m",<br>  "update_time": true<br>}</pre> | no |
 | <a name="input_rpi_zero_ip"></a> [rpi\_zero\_ip](#input\_rpi\_zero\_ip) | Raspberry Pi Zero IP address (ISP monitoring device) | `string` | n/a | yes |
 | <a name="input_services_to_disable"></a> [services\_to\_disable](#input\_services\_to\_disable) | Map of services to disable with their port numbers | <pre>map(object({<br>    port    = number<br>    comment = string<br>  }))</pre> | <pre>{<br>  "ftp": {<br>    "comment": "FTP service",<br>    "port": 21<br>  },<br>  "telnet": {<br>    "comment": "Telnet service",<br>    "port": 23<br>  },<br>  "www": {<br>    "comment": "HTTP web service",<br>    "port": 80<br>  }<br>}</pre> | no |

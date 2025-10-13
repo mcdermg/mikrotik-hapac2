@@ -209,3 +209,9 @@ variable "connection_tracking_udp_timeout" {
 #  type        = string
 #  default     = "https://ghcr.io"
 #}
+
+variable "proxmox_port" {
+  description = "Proxmox port"
+  type        = number
+  default     = 8006
+}

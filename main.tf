@@ -1,6 +1,7 @@
 locals {
   # Extract IP without CIDR for use in configurations
   lan_gateway_ip = split("/", var.lan.gateway)[0]
+  wan_gateway_ip = split("/", var.wan.interface_ip)[0]
 
   # DHCP pool range
   dhcp_pool_range = "${var.dhcp.pool_start}-${var.dhcp.pool_end}"
@@ -124,6 +125,20 @@ resource "routeros_ip_firewall_nat" "masquerade" {
   comment       = "NAT internet"
 }
 
+## NAT rule for Android to Proxmox access
+# TODO: Variablize
+resource "routeros_ip_firewall_nat" "android_proxmox_nat" {
+  chain           = "dstnat"
+  action          = "dst-nat"
+  protocol        = "tcp"
+  dst_address     = local.wan_gateway_ip
+  dst_port        = var.proxmox_port
+  to_addresses    = var.static_leases.msi_cubi.ip_address
+  to_ports        = var.proxmox_port
+  src_mac_address = var.android_mac
+  comment         = "Android-Proxmox-MAC"
+}
+
 # FIREWALL FILTER RULES (In exact order from config)
 resource "routeros_ip_firewall_filter" "allow_established_related" {
   chain            = "input"
@@ -217,6 +232,21 @@ resource "routeros_ip_firewall_filter" "allow_rpi_zero_ping" {
   ]
 }
 
+# Firewall filter rule for Android to Proxmox forwarding
+resource "routeros_ip_firewall_filter" "android_proxmox_forward" {
+  chain           = "forward"
+  action          = "accept"
+  protocol        = "tcp"
+  src_mac_address = var.android_mac
+  dst_address     = var.static_leases.msi_cubi.ip_address
+  dst_port        = var.proxmox_port
+  comment         = "Android to Proxmox"
+
+  depends_on = [
+    routeros_ip_firewall_filter.allow_rpi_zero_ping
+  ]
+}
+
 resource "routeros_ip_firewall_filter" "allow_monitoring_blackbox" {
   chain       = "forward"
   action      = "accept"
@@ -226,7 +256,7 @@ resource "routeros_ip_firewall_filter" "allow_monitoring_blackbox" {
   dst_port    = tostring(var.blackbox_exporter_port)
   comment     = "Allow monitoring to Blackbox Exporter"
   depends_on = [
-    routeros_ip_firewall_filter.allow_rpi_zero_ping
+    routeros_ip_firewall_filter.android_proxmox_forward
   ]
 }
 
