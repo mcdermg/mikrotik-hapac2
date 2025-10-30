@@ -271,9 +271,9 @@ resource "routeros_ip_firewall_filter" "block_wan_input" {
 }
 
 resource "routeros_ip_firewall_filter" "allow_wan_subnet_forward" {
-  chain       = "forward"
-  action      = "accept"
-  protocol    = "tcp"
+  chain  = "forward"
+  action = "accept"
+  #protocol    = "tcp"
   src_address = var.wan.cidr
   depends_on = [
     routeros_ip_firewall_filter.block_wan_input
