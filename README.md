@@ -83,6 +83,7 @@ No modules.
 | [routeros_ip_firewall_connection_tracking.connection_tracking](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_connection_tracking) | resource |
 | [routeros_ip_firewall_filter.allow_android_mac](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_established_related](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_isp_network](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_laptop_ip](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_laptop_mac](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_monitoring_blackbox](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |

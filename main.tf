@@ -147,6 +147,7 @@ resource "routeros_ip_firewall_filter" "allow_established_related" {
   comment          = "Allow established and related connections"
 }
 
+# TODO# rotate mac
 resource "routeros_ip_firewall_filter" "allow_laptop_mac" {
   chain           = "input"
   action          = "accept"
@@ -154,7 +155,20 @@ resource "routeros_ip_firewall_filter" "allow_laptop_mac" {
   src_mac_address = var.laptop_mac
   comment         = "Allow laptop by MAC"
   depends_on = [
-    routeros_ip_firewall_filter.allow_established_related
+    routeros_ip_firewall_filter.allow_established_related,
+  ]
+}
+
+# Adding for acess post laptop switch
+resource "routeros_ip_firewall_filter" "allow_isp_network" {
+  chain        = "input"
+  action       = "accept"
+  in_interface = var.wan.interface
+  src_address  = "192.168.0.0/24"
+  comment      = "Allow ISP Telecentri network access. Entire 192.168.0.0/24"
+  depends_on = [
+    routeros_ip_firewall_filter.allow_laptop_mac,
+    routeros_ip_firewall_filter.allow_established_related,
   ]
 }
 
@@ -165,7 +179,8 @@ resource "routeros_ip_firewall_filter" "allow_android_mac" {
   src_mac_address = var.android_mac
   comment         = "AllowAndroid by MAC"
   depends_on = [
-    routeros_ip_firewall_filter.allow_laptop_mac
+    routeros_ip_firewall_filter.allow_laptop_mac,
+    routeros_ip_firewall_filter.allow_isp_network,
   ]
 }
 
@@ -178,7 +193,7 @@ resource "routeros_ip_firewall_filter" "allow_rpi_zero_icmp_lan" {
   protocol     = "icmp"
   comment      = "Allow RPi Zero ICMP to LAN"
   depends_on = [
-    routeros_ip_firewall_filter.allow_android_mac
+    routeros_ip_firewall_filter.allow_android_mac,
   ]
 }
 
@@ -192,7 +207,7 @@ resource "routeros_ip_firewall_filter" "allow_rpi_zero_http_https_lan" {
   dst_port     = local.http_https_ports
   comment      = "Allow RPi Zero HTTP/HTTPS to LAN"
   depends_on = [
-    routeros_ip_firewall_filter.allow_rpi_zero_icmp_lan
+    routeros_ip_firewall_filter.allow_rpi_zero_icmp_lan,
   ]
 }
 
@@ -205,7 +220,7 @@ resource "routeros_ip_firewall_filter" "allow_laptop_ip" {
   dst_port     = local.ssh_api_ports
   comment      = "Allow laptop by IP"
   depends_on = [
-    routeros_ip_firewall_filter.allow_rpi_zero_http_https_lan
+    routeros_ip_firewall_filter.allow_rpi_zero_http_https_lan,
   ]
 }
 
@@ -217,7 +232,7 @@ resource "routeros_ip_firewall_filter" "allow_rpi_zero_ping_wan" {
   protocol     = "icmp"
   comment      = "Allow RPi Zero ping to MikroTik WAN"
   depends_on = [
-    routeros_ip_firewall_filter.allow_laptop_ip
+    routeros_ip_firewall_filter.allow_laptop_ip,
   ]
 }
 
@@ -228,7 +243,7 @@ resource "routeros_ip_firewall_filter" "allow_rpi_zero_ping" {
   protocol    = "icmp"
   comment     = "Allow RPi Zero ping to MikroTik"
   depends_on = [
-    routeros_ip_firewall_filter.allow_rpi_zero_ping_wan
+    routeros_ip_firewall_filter.allow_rpi_zero_ping_wan,
   ]
 }
 
@@ -243,7 +258,7 @@ resource "routeros_ip_firewall_filter" "android_proxmox_forward" {
   comment         = "Android to Proxmox"
 
   depends_on = [
-    routeros_ip_firewall_filter.allow_rpi_zero_ping
+    routeros_ip_firewall_filter.allow_rpi_zero_ping,
   ]
 }
 
@@ -256,7 +271,7 @@ resource "routeros_ip_firewall_filter" "allow_monitoring_blackbox" {
   dst_port    = tostring(var.blackbox_exporter_port)
   comment     = "Allow monitoring to Blackbox Exporter"
   depends_on = [
-    routeros_ip_firewall_filter.android_proxmox_forward
+    routeros_ip_firewall_filter.android_proxmox_forward,
   ]
 }
 
@@ -266,7 +281,7 @@ resource "routeros_ip_firewall_filter" "block_wan_input" {
   in_interface = var.wan.interface
   comment      = "Block connections from internet"
   depends_on = [
-    routeros_ip_firewall_filter.allow_monitoring_blackbox
+    routeros_ip_firewall_filter.allow_monitoring_blackbox,
   ]
 }
 
@@ -276,7 +291,7 @@ resource "routeros_ip_firewall_filter" "allow_wan_subnet_forward" {
   #protocol    = "tcp"
   src_address = var.wan.cidr
   depends_on = [
-    routeros_ip_firewall_filter.block_wan_input
+    routeros_ip_firewall_filter.block_wan_input,
   ]
 }
 
