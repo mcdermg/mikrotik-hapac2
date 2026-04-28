@@ -21,6 +21,25 @@ terraform import routeros_ip_address.wan_address "*1"
 13. `terraform plan -compact-warnings`
 14. `terraform apply -compact-warnings`
 
+## Administration Device Change
+If switching main device for Terraform and accessing the router tthen the values for the IP and MAC address present in the rules need to be updated. Terraform wont be able to access after a change so ssh access via `ssh user@routerIP` with associated password will allow access and then update rules via:
+
+```
+/ip firewall filter set [find comment="Allow laptop by MAC"] src-mac-address=XX:YY:11:22:33:AA                              
+   
+/ip firewall filter set [find comment="Allow laptop by IP"] src-address=XXX.XXX.XXX.XXX
+```
+
+**NOTE**: MAC address should use all uppercase for letters otherwise Terraform will throw an error via the provider and its validation.
+
+To verify run:
+
+```
+/ip firewall filter print where comment~"laptop"
+```
+
+Confirm updated and matching.
+
 ### Terraform issues
 
 #### Container Config

@@ -165,7 +165,7 @@ resource "routeros_ip_firewall_filter" "allow_isp_network" {
   action       = "accept"
   in_interface = var.wan.interface
   src_address  = "192.168.0.0/24"
-  comment      = "Allow ISP Telecentri network access. Entire 192.168.0.0/24"
+  comment      = "Allow ISP Telecentro network access. Entire 192.168.0.0/24"
   depends_on = [
     routeros_ip_firewall_filter.allow_laptop_mac,
     routeros_ip_firewall_filter.allow_established_related,
