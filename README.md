@@ -40,6 +40,22 @@ To verify run:
 
 Confirm updated and matching.
 
+Also add route locally on the new device via:
+
+```
+nmcli connection modify "Wired connection 1" +ipv4.routes "192.168.1.0/24 192.168.0.98"
+nmcli connection up "Wired connection 1"  
+```
+**NOTE:** Change connection name as required and ranges if different in the above commands.
+
+For a tempeory route use:
+
+```
+sudo ip route add 192.168.1.0/24 via 192.168.0.98
+```
+
+**NOTE:** This is not persistent on device rebbot.
+
 ### Terraform issues
 
 #### Container Config
