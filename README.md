@@ -87,13 +87,13 @@ resource "routeros_container_config" "config" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.13 |
-| <a name="requirement_routeros"></a> [routeros](#requirement\_routeros) | 1.88.0 |
+| <a name="requirement_routeros"></a> [routeros](#requirement\_routeros) | 1.99.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_routeros"></a> [routeros](#provider\_routeros) | 1.88.0 |
+| <a name="provider_routeros"></a> [routeros](#provider\_routeros) | 1.99.1 |
 
 ## Modules
 
@@ -103,39 +103,39 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [routeros_container.monitor_isp](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/container) | resource |
-| [routeros_interface_bridge.bridge_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/interface_bridge) | resource |
-| [routeros_interface_bridge_port.lan_ports](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/interface_bridge_port) | resource |
-| [routeros_interface_bridge_port.veth_container](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/interface_bridge_port) | resource |
-| [routeros_interface_veth.veth_container](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/interface_veth) | resource |
-| [routeros_ip_address.lan_address](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_address) | resource |
-| [routeros_ip_address.wan_address](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_address) | resource |
-| [routeros_ip_cloud.cloud_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_cloud) | resource |
-| [routeros_ip_dhcp_server.dhcp_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_dhcp_server) | resource |
-| [routeros_ip_dhcp_server_lease.static_leases](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_dhcp_server_lease) | resource |
-| [routeros_ip_dhcp_server_network.lan_network](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_dhcp_server_network) | resource |
-| [routeros_ip_dns.dns_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_dns) | resource |
-| [routeros_ip_firewall_connection_tracking.connection_tracking](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_connection_tracking) | resource |
-| [routeros_ip_firewall_filter.allow_android_mac](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_established_related](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_isp_network](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_laptop_ip](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_laptop_mac](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_monitoring_blackbox](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_rpi_zero_http_https_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_rpi_zero_icmp_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_rpi_zero_ping](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_rpi_zero_ping_wan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_wan_subnet_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.android_proxmox_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.block_wan_input](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_nat.android_proxmox_nat](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_nat) | resource |
-| [routeros_ip_firewall_nat.masquerade](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_firewall_nat) | resource |
-| [routeros_ip_pool.lan_pool](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_pool) | resource |
-| [routeros_ip_route.default_route](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_route) | resource |
-| [routeros_ip_service.disabled_services](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/ip_service) | resource |
-| [routeros_snmp.snmp_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/snmp) | resource |
-| [routeros_system_clock.timezone](https://registry.terraform.io/providers/terraform-routeros/routeros/1.88.0/docs/resources/system_clock) | resource |
+| [routeros_container.monitor_isp](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/container) | resource |
+| [routeros_interface_bridge.bridge_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/interface_bridge) | resource |
+| [routeros_interface_bridge_port.lan_ports](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/interface_bridge_port) | resource |
+| [routeros_interface_bridge_port.veth_container](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/interface_bridge_port) | resource |
+| [routeros_interface_veth.veth_container](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/interface_veth) | resource |
+| [routeros_ip_address.lan_address](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_address) | resource |
+| [routeros_ip_address.wan_address](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_address) | resource |
+| [routeros_ip_cloud.cloud_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_cloud) | resource |
+| [routeros_ip_dhcp_server.dhcp_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dhcp_server) | resource |
+| [routeros_ip_dhcp_server_lease.static_leases](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dhcp_server_lease) | resource |
+| [routeros_ip_dhcp_server_network.lan_network](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dhcp_server_network) | resource |
+| [routeros_ip_dns.dns_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dns) | resource |
+| [routeros_ip_firewall_connection_tracking.connection_tracking](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_connection_tracking) | resource |
+| [routeros_ip_firewall_filter.allow_android_mac](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_established_related](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_isp_network](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_laptop_ip](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_laptop_mac](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_monitoring_blackbox](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_rpi_zero_http_https_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_rpi_zero_icmp_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_rpi_zero_ping](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_rpi_zero_ping_wan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_wan_subnet_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.android_proxmox_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.block_wan_input](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_nat.android_proxmox_nat](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_nat) | resource |
+| [routeros_ip_firewall_nat.masquerade](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_nat) | resource |
+| [routeros_ip_pool.lan_pool](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_pool) | resource |
+| [routeros_ip_route.default_route](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_route) | resource |
+| [routeros_ip_service.disabled_services](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_service) | resource |
+| [routeros_snmp.snmp_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/snmp) | resource |
+| [routeros_system_clock.timezone](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_clock) | resource |
 
 ## Inputs
 

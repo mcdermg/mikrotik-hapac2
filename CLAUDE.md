@@ -225,7 +225,7 @@ services_to_disable = {
 6. Commit `.tf` files (NOT `.tfvars`) to git
 
 ### Provider Version
-- Terraform `~> 1.13`, provider `terraform-routeros/routeros` pinned to `1.88.0`
+- Terraform `~> 1.13`, provider `terraform-routeros/routeros` pinned to `1.99.1`
 - Pin versions in production
 - Test updates in non-production first
 
