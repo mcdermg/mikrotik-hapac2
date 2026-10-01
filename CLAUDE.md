@@ -32,10 +32,12 @@ This is a Terraform project for managing a MikroTik RBD52G-5HacD2HnD router (Rou
 ├── variables.tf               # Variable definitions with defaults
 ├── versions.tf                # Provider and Terraform version config
 ├── outputs.tf                 # Output definitions
-├── terraform.tfvars.example   # Example variable values
+├── terraform.tfvars           # Variable values (gitignored, local only)
 ├── .gitignore                 # Git ignore patterns
-├── README.md                  # User documentation
-└── claude.md                  # This file - AI assistant context
+├── .pre-commit-config.yaml    # fmt, validate, tflint, terraform-docs hooks
+├── .tflint.hcl                # TFLint rules
+├── README.md                  # User documentation (TF docs auto-generated)
+└── CLAUDE.md                  # This file - AI assistant context
 ```
 
 ## Coding Conventions
@@ -44,7 +46,7 @@ This is a Terraform project for managing a MikroTik RBD52G-5HacD2HnD router (Rou
 
 1. **DRY Principle**: NEVER hardcode values that are used in multiple places
    - ❌ BAD: `address = "192.168.1.0/24"` scattered throughout
-   - ✅ GOOD: `address = var.lan_cidr` everywhere
+   - ✅ GOOD: `address = var.lan.cidr` everywhere
 
 2. **Comment Style**: Simple section headers only
    - ❌ BAD: `# ============================================================================`
@@ -57,13 +59,13 @@ This is a Terraform project for managing a MikroTik RBD52G-5HacD2HnD router (Rou
 4. **Use Locals for Computed Values**: Extract/compute from variables
    ```hcl
    locals {
-     lan_gateway_ip = split("/", var.lan_gateway)[0]
-     dhcp_pool_range = "${var.dhcp_pool_start}-${var.dhcp_pool_end}"
+     lan_gateway_ip  = split("/", var.lan.gateway)[0]
+     dhcp_pool_range = "${var.dhcp.pool_start}-${var.dhcp.pool_end}"
    }
    ```
 
 5. **Use `for_each` for Collections**: Never duplicate resource blocks
-   - Bridge ports: `for_each = toset(var.lan_bridge_ports)`
+   - Bridge ports: `for_each = toset(var.lan.bridge_ports)`
    - Static leases: `for_each = var.static_leases`
    - Disabled services: `for_each = var.services_to_disable`
 
@@ -85,17 +87,16 @@ This is a Terraform project for managing a MikroTik RBD52G-5HacD2HnD router (Rou
 **IMPORTANT**: Some resources are auto-managed by MikroTik Cloud:
 - WireGuard interface for Back To Home VPN is auto-created when `back-to-home-vpn=enabled`
 - DO NOT create `routeros_interface_wireguard` for Back To Home VPN
-- Only manage the cloud setting: `routeros_ip_cloud.back_to_home_vpn`
+- Only manage the cloud setting: `routeros_ip_cloud.cloud_settings`
 
 ### API Access
 
-The RouterOS API must be enabled for Terraform to work:
+Terraform connects via `api://` (port 8728), so the API service must be enabled:
 ```routeros
 /ip service enable api
-/ip service enable api-ssl
 ```
 
-After applying Terraform, API should be disabled for security (this is in the config).
+Terraform does NOT disable `api`/`api-ssl` (those entries are commented out in `services_to_disable`), since doing so would lock Terraform out.
 
 ### Container Setup
 
@@ -108,7 +109,7 @@ Container requires:
 
 Firewall rules MUST be in this exact order (use `depends_on` chains):
 1. Allow established/related
-2. Allow specific devices (MAC/IP)
+2. Allow specific devices (MAC/IP) and the ISP network (`192.168.0.0/24`)
 3. Allow specific forwards
 4. DROP all WAN input (MUST BE LAST input rule)
 5. General forward rules
@@ -169,14 +170,17 @@ static_leases = {
 
 ### Changing Network Scheme
 
-1. Update CIDRs in `terraform.tfvars`:
+1. Update CIDRs in the `lan` object in `terraform.tfvars`:
 ```hcl
-lan_cidr = "10.0.1.0/24"
-lan_gateway = "10.0.1.1/24"
+lan = {
+  cidr    = "10.0.1.0/24"
+  gateway = "10.0.1.1/24"
+  # ...
+}
 ```
 
 2. Update related IPs (static leases, etc.)
-3. All resources referencing `var.lan_cidr` update automatically
+3. All resources referencing `var.lan.cidr` update automatically
 
 ### Adding a Firewall Rule
 
@@ -221,7 +225,7 @@ services_to_disable = {
 6. Commit `.tf` files (NOT `.tfvars`) to git
 
 ### Provider Version
-- Currently using `terraform-routeros/routeros ~> 1.60`
+- Terraform `~> 1.13`, provider `terraform-routeros/routeros` pinned to `1.88.0`
 - Pin versions in production
 - Test updates in non-production first
 
@@ -241,7 +245,7 @@ services_to_disable = {
 - Consider dynamic inventory for Ansible
 
 ### With Ansible
-- Export outputs as JSON: `terraform output -json > ansible/inventory/terraform.json`
+- Export outputs as JSON: `terraform output -json > ansible/inventory/terraform.json` (NOTE: all outputs in `outputs.tf` are currently commented out)
 - Use outputs for inventory generation
 - Ansible manages container/VM configuration
 
@@ -270,4 +274,3 @@ services_to_disable = {
 8. NEVER run terraform apply
 9. NEVER run terraform destroy
 10. NEVER run terraform destroy -auto-approve
-11. NEVER run terraform destroy -auto-approve

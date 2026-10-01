@@ -11,7 +11,7 @@ The process for resetting and allowing this IaC to be able to run is as follows:
 6. `/ip address add address=192.168.0.98/24 interface=ether1`
 7. `/ip route add gateway=192.168.0.1`
 8. `ssh-keygen -f "/home/gary/.ssh/known_hosts" -R "192.168.0.98"`
-9. ssh to thr router via `ssh gary@xxx.xxx.x.xx`
+9. ssh to the router via `ssh gary@192.168.0.98`
 10. `/user set admin disabled=yes`
 11. Import existing resources into Terraform state:
 ```bash
@@ -22,7 +22,7 @@ terraform import routeros_ip_address.wan_address "*1"
 14. `terraform apply -compact-warnings`
 
 ## Administration Device Change
-If switching main device for Terraform and accessing the router tthen the values for the IP and MAC address present in the rules need to be updated. Terraform wont be able to access after a change so ssh access via `ssh user@routerIP` with associated password will allow access and then update rules via:
+If switching main device for Terraform and accessing the router then the values for the IP and MAC address present in the rules need to be updated. Terraform won't be able to access after a change so ssh access via `ssh user@routerIP` with associated password will allow access and then update rules via:
 
 ```
 /ip firewall filter set [find comment="Allow laptop by MAC"] src-mac-address=XX:YY:11:22:33:AA                              
@@ -48,18 +48,18 @@ nmcli connection up "Wired connection 1"
 ```
 **NOTE:** Change connection name as required and ranges if different in the above commands.
 
-For a tempeory route use:
+For a temporary route use:
 
 ```
 sudo ip route add 192.168.1.0/24 via 192.168.0.98
 ```
 
-**NOTE:** This is not persistent on device rebbot.
+**NOTE:** This is not persistent on device reboot.
 
 ### Terraform issues
 
 #### Container Config
-There appears to be an issue with [container_config](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/container_config)as the `ram_high` element generates an error on any apply.
+There appears to be an issue with [container_config](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/container_config) as the `ram_high` element generates an error on any apply.
 
 ```
 │ Error: from RouterOS device: unknown parameter ram-high
