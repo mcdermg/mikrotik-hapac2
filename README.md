@@ -25,8 +25,8 @@ terraform import routeros_ip_address.wan_address "*1"
 If switching main device for Terraform and accessing the router then the values for the IP and MAC address present in the rules need to be updated. Terraform won't be able to access after a change so ssh access via `ssh user@routerIP` with associated password will allow access and then update rules via:
 
 ```
-/ip firewall filter set [find comment="Allow laptop by MAC"] src-mac-address=XX:YY:11:22:33:AA                              
-   
+/ip firewall filter set [find comment="Allow laptop by MAC"] src-mac-address=XX:YY:11:22:33:AA
+
 /ip firewall filter set [find comment="Allow laptop by IP"] src-address=XXX.XXX.XXX.XXX
 ```
 
@@ -44,7 +44,7 @@ Also add route locally on the new device via:
 
 ```
 nmcli connection modify "Wired connection 1" +ipv4.routes "192.168.1.0/24 192.168.0.98"
-nmcli connection up "Wired connection 1"  
+nmcli connection up "Wired connection 1"
 ```
 **NOTE:** Change connection name as required and ranges if different in the above commands.
 
