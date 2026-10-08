@@ -1,5 +1,29 @@
 # Mikrotik hAP ac2
 
+## State Backend
+State is stored in Cloudflare R2 using the `s3` backend (see `backend.tf`):
+
+- Bucket: `iac-state`
+- Key: `homelab/mikrotik-hapac2/terraform.tfstate`
+- Locking: `use_lockfile = true` writes a `.tflock` object next to the state using a conditional write (`If-None-Match`), so no DynamoDB table is needed
+
+Credentials and the endpoint are not in the backend block and come from a git ignored `.envrc` loaded by [direnv](https://direnv.net/):
+
+```bash
+#!/usr/bin/env bash
+export AWS_ACCESS_KEY_ID=<r2-access-key-id>
+export AWS_SECRET_ACCESS_KEY=<r2-secret-access-key>
+export AWS_ENDPOINT_URL_S3=https://<account-id>.r2.cloudflarestorage.com
+```
+
+The keys are from an R2 Account API token (R2 Object Storage → Account Details → API Tokens → Manage) with **Object Read & Write** scoped to the `iac-state` bucket only. They are stored in the password manager.
+
+To set up on a new machine:
+
+1. Create `.envrc` as above and run `direnv allow`
+2. `terraform init`
+3. `terraform plan -compact-warnings` and confirm no unexpected changes
+
 ## Bootstrap
 The process for resetting and allowing this IaC to be able to run is as follows:
 
