@@ -17,7 +17,7 @@ This is a Terraform project for managing a MikroTik RBD52G-5HacD2HnD router (Rou
 - **Skull Canyon NUC**: `192.168.1.251` - Proxmox node pve02
 - **Raspberry Pi 4**: `192.168.1.241`
 - **Raspberry Pi 3**: `192.168.1.242`
-- **Raspberry Pi Zero**: `192.168.0.62` - ISP monitoring and planned Proxmox QDevice (on WAN side)
+- **Raspberry Pi Zero**: `192.168.0.62` - Gatus ISP monitoring (on WAN side)
 - **ISP Monitor Container**: `192.168.1.249` - Blackbox Exporter
 - **TP-Link Switch**: `192.168.1.254`
 
