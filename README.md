@@ -87,6 +87,7 @@ resource "routeros_container_config" "config" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.13 |
+| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 5.0 |
 | <a name="requirement_routeros"></a> [routeros](#requirement\_routeros) | 1.99.1 |
 
 ## Providers
@@ -145,6 +146,7 @@ No modules.
 | <a name="input_api_port"></a> [api\_port](#input\_api\_port) | RouterOS API port | `number` | `8291` | no |
 | <a name="input_blackbox_exporter_host"></a> [blackbox\_exporter\_host](#input\_blackbox\_exporter\_host) | Blackbox Exporter host IP (MSI Cubi) | `string` | n/a | yes |
 | <a name="input_blackbox_exporter_port"></a> [blackbox\_exporter\_port](#input\_blackbox\_exporter\_port) | Blackbox Exporter port for ISP monitoring | `number` | `9115` | no |
+| <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | Cloudflare API token for provider for backend | `string` | n/a | yes |
 | <a name="input_connection_tracking_udp_timeout"></a> [connection\_tracking\_udp\_timeout](#input\_connection\_tracking\_udp\_timeout) | UDP connection tracking timeout | `string` | `"10s"` | no |
 | <a name="input_container"></a> [container](#input\_container) | Container configuration | <pre>object({<br>    veth_name     = string<br>    ip            = string<br>    gateway       = string<br>    image         = string<br>    start_on_boot = bool<br>  })</pre> | n/a | yes |
 | <a name="input_dhcp"></a> [dhcp](#input\_dhcp) | DHCP configuration | <pre>object({<br>    pool_name   = string<br>    pool_start  = string<br>    pool_end    = string<br>    server_name = string<br>  })</pre> | n/a | yes |

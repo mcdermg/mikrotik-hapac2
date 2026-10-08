@@ -1,3 +1,10 @@
+# Cloudflare for backend
+variable "cloudflare_api_token" {
+  description = "Cloudflare API token for provider for backend"
+  type        = string
+  sensitive   = true
+}
+
 # MIKROTIK CONNECTION
 variable "mikrotik" {
   description = "MikroTik connection configuration"

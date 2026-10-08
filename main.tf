@@ -126,7 +126,7 @@ resource "routeros_ip_firewall_nat" "masquerade" {
 }
 
 ## NAT rule for Android to Proxmox access
-# TODO: Variablize
+# TODO: Variableize
 resource "routeros_ip_firewall_nat" "android_proxmox_nat" {
   chain           = "dstnat"
   action          = "dst-nat"
@@ -159,7 +159,7 @@ resource "routeros_ip_firewall_filter" "allow_laptop_mac" {
   ]
 }
 
-# Adding for acess post laptop switch
+# Adding for access post laptop switch
 resource "routeros_ip_firewall_filter" "allow_isp_network" {
   chain        = "input"
   action       = "accept"
