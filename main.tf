@@ -30,6 +30,13 @@ resource "routeros_snmp" "snmp_settings" {
 #  password = var.mikrotik_password
 #}
 
+resource "routeros_system_user_sshkeys" "ssh_keys" {
+  for_each = var.ssh_keys
+  user     = var.mikrotik.username
+  key      = each.value
+  comment  = each.key
+}
+
 # Note: Disabling admin user should be done manually after verifying gary user works
 # resource "routeros_user" "admin_disabled" {
 #   name     = "admin"
@@ -262,6 +269,9 @@ resource "routeros_ip_firewall_filter" "android_proxmox_forward" {
   ]
 }
 
+# TODO: blackbox_exporter_host is 192.168.1.250 (pve01) but the exporter is meant to run in the
+# ISP monitor container at 192.168.1.249. Nothing answers on 9115 at either IP. Check the container
+# on the router, then point this at .249 or drop the rule.
 resource "routeros_ip_firewall_filter" "allow_monitoring_blackbox" {
   chain       = "forward"
   action      = "accept"

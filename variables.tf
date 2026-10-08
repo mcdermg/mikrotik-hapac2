@@ -17,6 +17,11 @@ variable "mikrotik" {
   sensitive = true
 }
 
+variable "ssh_keys" {
+  description = "Public SSH keys for the MikroTik user, keyed by machine name"
+  type        = map(string)
+}
+
 # SYSTEM CONFIGURATION
 variable "timezone" {
   description = "System timezone"

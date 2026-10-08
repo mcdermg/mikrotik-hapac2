@@ -180,6 +180,7 @@ No modules.
 | [routeros_ip_service.disabled_services](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_service) | resource |
 | [routeros_snmp.snmp_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/snmp) | resource |
 | [routeros_system_clock.timezone](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_clock) | resource |
+| [routeros_system_user_sshkeys.ssh_keys](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_user_sshkeys) | resource |
 
 ## Inputs
 
@@ -206,6 +207,7 @@ No modules.
 | <a name="input_rpi_zero_ip"></a> [rpi\_zero\_ip](#input\_rpi\_zero\_ip) | Raspberry Pi Zero IP address (ISP monitoring device) | `string` | n/a | yes |
 | <a name="input_services_to_disable"></a> [services\_to\_disable](#input\_services\_to\_disable) | Map of services to disable with their port numbers | <pre>map(object({<br>    port    = number<br>    comment = string<br>  }))</pre> | <pre>{<br>  "ftp": {<br>    "comment": "FTP service",<br>    "port": 21<br>  },<br>  "telnet": {<br>    "comment": "Telnet service",<br>    "port": 23<br>  },<br>  "www": {<br>    "comment": "HTTP web service",<br>    "port": 80<br>  }<br>}</pre> | no |
 | <a name="input_snmp_enabled"></a> [snmp\_enabled](#input\_snmp\_enabled) | Enable SNMP monitoring | `bool` | `true` | no |
+| <a name="input_ssh_keys"></a> [ssh\_keys](#input\_ssh\_keys) | Public SSH keys for the MikroTik user, keyed by machine name | `map(string)` | n/a | yes |
 | <a name="input_ssh_port"></a> [ssh\_port](#input\_ssh\_port) | SSH port | `number` | `22` | no |
 | <a name="input_static_leases"></a> [static\_leases](#input\_static\_leases) | Static DHCP lease assignments | <pre>map(object({<br>    ip_address  = string<br>    mac_address = string<br>    comment     = string<br>  }))</pre> | n/a | yes |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | System timezone | `string` | `"America/Argentina/Buenos_Aires"` | no |
