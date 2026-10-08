@@ -13,12 +13,30 @@ This is a Terraform project for managing a MikroTik RBD52G-5HacD2HnD router (Rou
 - **MikroTik LAN IP**: `192.168.1.1` (lab gateway, bridge-lan)
 
 ### Key Devices
-- **MSI Cubi N ADL**: `192.168.1.250` - Proxmox host
-- **Raspberry Pi 4**: `192.168.1.252`
-- **Raspberry Pi 3**: `192.168.1.251`
-- **Raspberry Pi Zero**: `192.168.0.62` - ISP monitoring (on WAN side)
+- **MSI Cubi N ADL**: `192.168.1.250` - Proxmox node pve01
+- **Skull Canyon NUC**: `192.168.1.251` - Proxmox node pve02
+- **Raspberry Pi 4**: `192.168.1.241`
+- **Raspberry Pi 3**: `192.168.1.242`
+- **Raspberry Pi Zero**: `192.168.0.62` - ISP monitoring and planned Proxmox QDevice (on WAN side)
 - **ISP Monitor Container**: `192.168.1.249` - Blackbox Exporter
-- **TP-Link Switch**: `192.168.1.253`
+- **TP-Link Switch**: `192.168.1.254`
+
+### Lab IP Layout
+| Range | Use |
+|---|---|
+| `.1` | MikroTik |
+| `.2`–`.9` | Network gear (spare) |
+| `.10`–`.49` | k8s LoadBalancer pool (MetalLB) |
+| `.50`–`.99` | DHCP pool |
+| `.100`–`.199` | LXCs (VMID = last octet) |
+| `.200`–`.239` | k3s VMs (VMID = last octet) |
+| `.240`–`.248` | Pis and other physical hosts |
+| `.249` | MikroTik ISP monitor container |
+| `.250`–`.252` | Proxmox nodes (pve01, pve02, spare) |
+| `.253` | Proxmox QDevice (reserved) |
+| `.254` | TP-Link switch |
+
+Static leases sit outside the DHCP pool. Nothing static or in the MetalLB range may fall inside `.50`–`.99`.
 
 ### Bridge Configuration
 - LAN bridge `bridge-lan` aggregates: ether2, ether3, ether4, ether5

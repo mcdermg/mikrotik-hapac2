@@ -24,6 +24,25 @@ To set up on a new machine:
 2. `terraform init`
 3. `terraform plan -compact-warnings` and confirm no unexpected changes
 
+## Lab IP Layout
+Layout for `192.168.1.0/24`. The DHCP pool and static leases are set in `terraform.tfvars`.
+
+| Range | Use |
+|---|---|
+| `.1` | MikroTik |
+| `.2`–`.9` | Network gear (spare) |
+| `.10`–`.49` | k8s LoadBalancer pool (MetalLB) |
+| `.50`–`.99` | DHCP pool |
+| `.100`–`.199` | LXCs (VMID = last octet) |
+| `.200`–`.239` | k3s VMs (VMID = last octet) |
+| `.240`–`.248` | Pis and other physical hosts (Pi 4 `.241`, Pi 3 `.242`) |
+| `.249` | MikroTik ISP monitor container |
+| `.250`–`.252` | Proxmox nodes (pve01 `.250`, pve02 `.251`, spare `.252`) |
+| `.253` | Proxmox QDevice (reserved) |
+| `.254` | TP-Link switch |
+
+Static leases can sit outside the DHCP pool. Nothing static or in the MetalLB range may fall inside `.50`–`.99`.
+
 ## Bootstrap
 The process for resetting and allowing this IaC to be able to run is as follows:
 
