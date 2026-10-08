@@ -17,7 +17,7 @@ This is a Terraform project for managing a MikroTik RBD52G-5HacD2HnD router (Rou
 - **Skull Canyon NUC**: `192.168.1.251` - Proxmox node pve02
 - **Raspberry Pi 4**: `192.168.1.241`
 - **Raspberry Pi 3**: `192.168.1.242`
-- **Raspberry Pi Zero**: `192.168.0.62` - Gatus ISP monitoring (on WAN side)
+- **Raspberry Pi Zero**: `192.168.0.62` - Gatus ISP monitoring and Proxmox QDevice (on WAN side)
 - **ISP Monitor Container**: `192.168.1.249` - Blackbox Exporter
 - **TP-Link Switch**: `192.168.1.254`
 
@@ -95,7 +95,7 @@ Static leases sit outside the DHCP pool. Nothing static or in the MetalLB range 
 
 ### Dependencies
 
-- Use `depends_on` for firewall rules to maintain exact ordering
+- Firewall rule order is set by the `sequence` in `routeros_move_items.firewall_order`, not by `depends_on`
 - Firewall order is CRITICAL for security (drop rule must be last)
 
 ## MikroTik-Specific Considerations
@@ -125,12 +125,23 @@ Container requires:
 
 ### Firewall Rule Order
 
-Firewall rules MUST be in this exact order (use `depends_on` chains):
+The ISP network (`192.168.0.0/24`) is untrusted except for devices in `trusted_devices` (matched by MAC on ether1). Rules MUST be in this order, enforced by `routeros_move_items.firewall_order`:
+
+Input:
 1. Allow established/related
-2. Allow specific devices (MAC/IP) and the ISP network (`192.168.0.0/24`)
-3. Allow specific forwards
-4. DROP all WAN input (MUST BE LAST input rule)
-5. General forward rules
+2. Drop invalid
+3. Allow ICMP
+4. Allow trusted devices (per MAC)
+5. DROP all WAN input (MUST BE LAST input rule)
+
+Forward:
+1. Allow established/related/untracked
+2. Drop invalid
+3. Allow trusted devices to the lab (per MAC)
+4. Allow specific forwards (Blackbox)
+5. DROP new WAN connections that are not dst-nat (MUST BE LAST forward rule)
+
+New rules are appended to the end of the list on the router, so every rule must be added to the `sequence` or it lands after the drops.
 
 ## Variable Structure
 
@@ -203,7 +214,7 @@ lan = {
 ### Adding a Firewall Rule
 
 1. Add resource to `main.tf` under firewall section
-2. Set proper `depends_on` to maintain rule order
+2. Add its `id` to the `sequence` in `routeros_move_items.firewall_order` at the right position
 3. Use variables for all IPs, ports, interfaces
 
 ### Disabling/Enabling a Service
@@ -224,7 +235,7 @@ services_to_disable = {
 ❌ **Using decorative comment borders**
 ❌ **Creating resources for cloud-managed infrastructure**
 ❌ **Breaking firewall rule order dependencies**
-❌ **Forgetting to add `depends_on` for firewall rules**
+❌ **Forgetting to add a new firewall rule to `routeros_move_items.firewall_order`**
 ❌ **Using inline values instead of variables in resources**
 
 ## Terraform Best Practices

@@ -160,24 +160,22 @@ No modules.
 | [routeros_ip_dhcp_server_network.lan_network](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dhcp_server_network) | resource |
 | [routeros_ip_dns.dns_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dns) | resource |
 | [routeros_ip_firewall_connection_tracking.connection_tracking](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_connection_tracking) | resource |
-| [routeros_ip_firewall_filter.allow_android_mac](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_established_related](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_isp_network](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_laptop_ip](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_laptop_mac](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_established_related_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_icmp_input](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_monitoring_blackbox](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_rpi_zero_http_https_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_rpi_zero_icmp_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_rpi_zero_ping](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_rpi_zero_ping_wan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_wan_subnet_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.android_proxmox_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_trusted_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.allow_trusted_input](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.block_wan_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.block_wan_input](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.drop_invalid_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
+| [routeros_ip_firewall_filter.drop_invalid_input](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_nat.android_proxmox_nat](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_nat) | resource |
 | [routeros_ip_firewall_nat.masquerade](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_nat) | resource |
 | [routeros_ip_pool.lan_pool](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_pool) | resource |
 | [routeros_ip_route.default_route](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_route) | resource |
 | [routeros_ip_service.disabled_services](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_service) | resource |
+| [routeros_move_items.firewall_order](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/move_items) | resource |
 | [routeros_snmp.snmp_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/snmp) | resource |
 | [routeros_system_clock.timezone](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_clock) | resource |
 | [routeros_system_user_sshkeys.ssh_keys](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_user_sshkeys) | resource |
@@ -186,8 +184,6 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_android_mac"></a> [android\_mac](#input\_android\_mac) | Android device MAC address for firewall allow rule | `string` | n/a | yes |
-| <a name="input_api_port"></a> [api\_port](#input\_api\_port) | RouterOS API port | `number` | `8291` | no |
 | <a name="input_blackbox_exporter_host"></a> [blackbox\_exporter\_host](#input\_blackbox\_exporter\_host) | Blackbox Exporter host IP (MSI Cubi) | `string` | n/a | yes |
 | <a name="input_blackbox_exporter_port"></a> [blackbox\_exporter\_port](#input\_blackbox\_exporter\_port) | Blackbox Exporter port for ISP monitoring | `number` | `9115` | no |
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | Cloudflare API token for provider for backend | `string` | n/a | yes |
@@ -196,21 +192,16 @@ No modules.
 | <a name="input_dhcp"></a> [dhcp](#input\_dhcp) | DHCP configuration | <pre>object({<br>    pool_name   = string<br>    pool_start  = string<br>    pool_end    = string<br>    server_name = string<br>  })</pre> | n/a | yes |
 | <a name="input_dns_allow_remote_requests"></a> [dns\_allow\_remote\_requests](#input\_dns\_allow\_remote\_requests) | Allow remote DNS requests | `bool` | `true` | no |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS server IP addresses | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "1.1.1.1"<br>]</pre> | no |
-| <a name="input_http_port"></a> [http\_port](#input\_http\_port) | HTTP port | `number` | `80` | no |
-| <a name="input_https_port"></a> [https\_port](#input\_https\_port) | HTTPS port | `number` | `443` | no |
 | <a name="input_lan"></a> [lan](#input\_lan) | LAN configuration | <pre>object({<br>    bridge_name  = string<br>    cidr         = string<br>    gateway      = string<br>    bridge_ports = list(string)<br>  })</pre> | n/a | yes |
-| <a name="input_laptop_ip"></a> [laptop\_ip](#input\_laptop\_ip) | Laptop IP address for firewall allow rule | `string` | n/a | yes |
-| <a name="input_laptop_mac"></a> [laptop\_mac](#input\_laptop\_mac) | Laptop MAC address for firewall allow rule | `string` | n/a | yes |
 | <a name="input_mikrotik"></a> [mikrotik](#input\_mikrotik) | MikroTik connection configuration | <pre>object({<br>    host     = string<br>    username = string<br>    password = string<br>    insecure = bool<br>  })</pre> | n/a | yes |
 | <a name="input_proxmox_port"></a> [proxmox\_port](#input\_proxmox\_port) | Proxmox port | `number` | `8006` | no |
 | <a name="input_routeros_ip_cloud"></a> [routeros\_ip\_cloud](#input\_routeros\_ip\_cloud) | Cloud/DDNS configuration | <pre>object({<br>    back_to_home_vpn     = string<br>    ddns_enabled         = string<br>    ddns_update_interval = string<br>    update_time          = bool<br>  })</pre> | <pre>{<br>  "back_to_home_vpn": "enabled",<br>  "ddns_enabled": "yes",<br>  "ddns_update_interval": "5m",<br>  "update_time": true<br>}</pre> | no |
-| <a name="input_rpi_zero_ip"></a> [rpi\_zero\_ip](#input\_rpi\_zero\_ip) | Raspberry Pi Zero IP address (ISP monitoring device) | `string` | n/a | yes |
 | <a name="input_services_to_disable"></a> [services\_to\_disable](#input\_services\_to\_disable) | Map of services to disable with their port numbers | <pre>map(object({<br>    port    = number<br>    comment = string<br>  }))</pre> | <pre>{<br>  "ftp": {<br>    "comment": "FTP service",<br>    "port": 21<br>  },<br>  "telnet": {<br>    "comment": "Telnet service",<br>    "port": 23<br>  },<br>  "www": {<br>    "comment": "HTTP web service",<br>    "port": 80<br>  }<br>}</pre> | no |
 | <a name="input_snmp_enabled"></a> [snmp\_enabled](#input\_snmp\_enabled) | Enable SNMP monitoring | `bool` | `true` | no |
 | <a name="input_ssh_keys"></a> [ssh\_keys](#input\_ssh\_keys) | Public SSH keys for the MikroTik user, keyed by machine name | `map(string)` | n/a | yes |
-| <a name="input_ssh_port"></a> [ssh\_port](#input\_ssh\_port) | SSH port | `number` | `22` | no |
 | <a name="input_static_leases"></a> [static\_leases](#input\_static\_leases) | Static DHCP lease assignments | <pre>map(object({<br>    ip_address  = string<br>    mac_address = string<br>    comment     = string<br>  }))</pre> | n/a | yes |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | System timezone | `string` | `"America/Argentina/Buenos_Aires"` | no |
+| <a name="input_trusted_devices"></a> [trusted\_devices](#input\_trusted\_devices) | MAC addresses on the ISP network allowed into the router and the lab, keyed by device name. The `android` key is also used by the Proxmox dst-nat rule | `map(string)` | n/a | yes |
 | <a name="input_wan"></a> [wan](#input\_wan) | WAN configuration | <pre>object({<br>    interface    = string<br>    cidr         = string<br>    interface_ip = string<br>    gateway      = string<br>  })</pre> | n/a | yes |
 
 ## Outputs

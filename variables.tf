@@ -105,48 +105,9 @@ variable "container" {
 }
 
 # FIREWALL CONFIGURATION
-variable "laptop_mac" {
-  description = "Laptop MAC address for firewall allow rule"
-  type        = string
-}
-
-variable "android_mac" {
-  description = "Android device MAC address for firewall allow rule"
-  type        = string
-}
-
-variable "laptop_ip" {
-  description = "Laptop IP address for firewall allow rule"
-  type        = string
-}
-
-variable "rpi_zero_ip" {
-  description = "Raspberry Pi Zero IP address (ISP monitoring device)"
-  type        = string
-}
-
-variable "ssh_port" {
-  description = "SSH port"
-  type        = number
-  default     = 22
-}
-
-variable "api_port" {
-  description = "RouterOS API port"
-  type        = number
-  default     = 8291
-}
-
-variable "http_port" {
-  description = "HTTP port"
-  type        = number
-  default     = 80
-}
-
-variable "https_port" {
-  description = "HTTPS port"
-  type        = number
-  default     = 443
+variable "trusted_devices" {
+  description = "MAC addresses on the ISP network allowed into the router and the lab, keyed by device name. The `android` key is also used by the Proxmox dst-nat rule"
+  type        = map(string)
 }
 
 variable "blackbox_exporter_port" {

@@ -6,10 +6,6 @@ locals {
   # DHCP pool range
   dhcp_pool_range = "${var.dhcp.pool_start}-${var.dhcp.pool_end}"
 
-  # Formatted ports for firewall rules
-  ssh_api_ports    = "${var.ssh_port},${var.api_port}"
-  http_https_ports = "${var.http_port},${var.https_port}"
-
   # container image
   container_image = var.container.image
 }
@@ -142,11 +138,12 @@ resource "routeros_ip_firewall_nat" "android_proxmox_nat" {
   dst_port        = var.proxmox_port
   to_addresses    = var.static_leases.msi_cubi.ip_address
   to_ports        = var.proxmox_port
-  src_mac_address = var.android_mac
+  src_mac_address = var.trusted_devices.android
   comment         = "Android-Proxmox-MAC"
 }
 
-# FIREWALL FILTER RULES (In exact order from config)
+# FIREWALL FILTER RULES
+# Order is enforced by routeros_move_items.firewall_order, not by depends_on
 resource "routeros_ip_firewall_filter" "allow_established_related" {
   chain            = "input"
   action           = "accept"
@@ -154,119 +151,60 @@ resource "routeros_ip_firewall_filter" "allow_established_related" {
   comment          = "Allow established and related connections"
 }
 
-# TODO# rotate mac
-resource "routeros_ip_firewall_filter" "allow_laptop_mac" {
+resource "routeros_ip_firewall_filter" "drop_invalid_input" {
+  chain            = "input"
+  action           = "drop"
+  connection_state = "invalid"
+  comment          = "Drop invalid"
+}
+
+resource "routeros_ip_firewall_filter" "allow_icmp_input" {
+  chain    = "input"
+  action   = "accept"
+  protocol = "icmp"
+  comment  = "Allow ICMP"
+}
+
+resource "routeros_ip_firewall_filter" "allow_trusted_input" {
+  for_each = var.trusted_devices
+
   chain           = "input"
   action          = "accept"
   in_interface    = var.wan.interface
-  src_mac_address = var.laptop_mac
-  comment         = "Allow laptop by MAC"
-  depends_on = [
-    routeros_ip_firewall_filter.allow_established_related,
-  ]
+  src_mac_address = each.value
+  comment         = "Allow trusted ${each.key} to router"
 }
 
-# Adding for access post laptop switch
-resource "routeros_ip_firewall_filter" "allow_isp_network" {
+resource "routeros_ip_firewall_filter" "block_wan_input" {
   chain        = "input"
-  action       = "accept"
+  action       = "drop"
   in_interface = var.wan.interface
-  src_address  = "192.168.0.0/24"
-  comment      = "Allow ISP Telecentro network access. Entire 192.168.0.0/24"
-  depends_on = [
-    routeros_ip_firewall_filter.allow_laptop_mac,
-    routeros_ip_firewall_filter.allow_established_related,
-  ]
+  comment      = "Block connections from internet"
 }
 
-resource "routeros_ip_firewall_filter" "allow_android_mac" {
-  chain           = "input"
-  action          = "accept"
-  in_interface    = var.wan.interface
-  src_mac_address = var.android_mac
-  comment         = "AllowAndroid by MAC"
-  depends_on = [
-    routeros_ip_firewall_filter.allow_laptop_mac,
-    routeros_ip_firewall_filter.allow_isp_network,
-  ]
+resource "routeros_ip_firewall_filter" "allow_established_related_forward" {
+  chain            = "forward"
+  action           = "accept"
+  connection_state = "established,related,untracked"
+  comment          = "Allow established and related connections"
 }
 
-resource "routeros_ip_firewall_filter" "allow_rpi_zero_icmp_lan" {
-  chain        = "forward"
-  action       = "accept"
-  in_interface = var.wan.interface
-  src_address  = var.rpi_zero_ip
-  dst_address  = var.lan.cidr
-  protocol     = "icmp"
-  comment      = "Allow RPi Zero ICMP to LAN"
-  depends_on = [
-    routeros_ip_firewall_filter.allow_android_mac,
-  ]
+resource "routeros_ip_firewall_filter" "drop_invalid_forward" {
+  chain            = "forward"
+  action           = "drop"
+  connection_state = "invalid"
+  comment          = "Drop invalid"
 }
 
-resource "routeros_ip_firewall_filter" "allow_rpi_zero_http_https_lan" {
-  chain        = "forward"
-  action       = "accept"
-  in_interface = var.wan.interface
-  src_address  = var.rpi_zero_ip
-  dst_address  = var.lan.cidr
-  protocol     = "tcp"
-  dst_port     = local.http_https_ports
-  comment      = "Allow RPi Zero HTTP/HTTPS to LAN"
-  depends_on = [
-    routeros_ip_firewall_filter.allow_rpi_zero_icmp_lan,
-  ]
-}
+resource "routeros_ip_firewall_filter" "allow_trusted_forward" {
+  for_each = var.trusted_devices
 
-resource "routeros_ip_firewall_filter" "allow_laptop_ip" {
-  chain        = "input"
-  action       = "accept"
-  in_interface = var.wan.interface
-  src_address  = var.laptop_ip
-  protocol     = "tcp"
-  dst_port     = local.ssh_api_ports
-  comment      = "Allow laptop by IP"
-  depends_on = [
-    routeros_ip_firewall_filter.allow_rpi_zero_http_https_lan,
-  ]
-}
-
-resource "routeros_ip_firewall_filter" "allow_rpi_zero_ping_wan" {
-  chain        = "input"
-  action       = "accept"
-  in_interface = var.wan.interface
-  src_address  = var.rpi_zero_ip
-  protocol     = "icmp"
-  comment      = "Allow RPi Zero ping to MikroTik WAN"
-  depends_on = [
-    routeros_ip_firewall_filter.allow_laptop_ip,
-  ]
-}
-
-resource "routeros_ip_firewall_filter" "allow_rpi_zero_ping" {
-  chain       = "input"
-  action      = "accept"
-  src_address = var.rpi_zero_ip
-  protocol    = "icmp"
-  comment     = "Allow RPi Zero ping to MikroTik"
-  depends_on = [
-    routeros_ip_firewall_filter.allow_rpi_zero_ping_wan,
-  ]
-}
-
-# Firewall filter rule for Android to Proxmox forwarding
-resource "routeros_ip_firewall_filter" "android_proxmox_forward" {
   chain           = "forward"
   action          = "accept"
-  protocol        = "tcp"
-  src_mac_address = var.android_mac
-  dst_address     = var.static_leases.msi_cubi.ip_address
-  dst_port        = var.proxmox_port
-  comment         = "Android to Proxmox"
-
-  depends_on = [
-    routeros_ip_firewall_filter.allow_rpi_zero_ping,
-  ]
+  in_interface    = var.wan.interface
+  src_mac_address = each.value
+  dst_address     = var.lan.cidr
+  comment         = "Allow trusted ${each.key} to lab"
 }
 
 # TODO: blackbox_exporter_host is 192.168.1.250 (pve01) but the exporter is meant to run in the
@@ -280,29 +218,38 @@ resource "routeros_ip_firewall_filter" "allow_monitoring_blackbox" {
   protocol    = "tcp"
   dst_port    = tostring(var.blackbox_exporter_port)
   comment     = "Allow monitoring to Blackbox Exporter"
-  depends_on = [
-    routeros_ip_firewall_filter.android_proxmox_forward,
-  ]
 }
 
-resource "routeros_ip_firewall_filter" "block_wan_input" {
-  chain        = "input"
-  action       = "drop"
-  in_interface = var.wan.interface
-  comment      = "Block connections from internet"
-  depends_on = [
-    routeros_ip_firewall_filter.allow_monitoring_blackbox,
-  ]
+# dst-nat is excluded so the Android to Proxmox NAT rule keeps working
+resource "routeros_ip_firewall_filter" "block_wan_forward" {
+  chain                = "forward"
+  action               = "drop"
+  in_interface         = var.wan.interface
+  connection_state     = "new"
+  connection_nat_state = "!dstnat"
+  comment              = "Block new connections from ISP network to lab"
 }
 
-resource "routeros_ip_firewall_filter" "allow_wan_subnet_forward" {
-  chain  = "forward"
-  action = "accept"
-  #protocol    = "tcp"
-  src_address = var.wan.cidr
-  depends_on = [
-    routeros_ip_firewall_filter.block_wan_input,
-  ]
+resource "routeros_move_items" "firewall_order" {
+  resource_path = "/ip/firewall/filter"
+  sequence = concat(
+    [
+      routeros_ip_firewall_filter.allow_established_related.id,
+      routeros_ip_firewall_filter.drop_invalid_input.id,
+      routeros_ip_firewall_filter.allow_icmp_input.id,
+    ],
+    values(routeros_ip_firewall_filter.allow_trusted_input)[*].id,
+    [
+      routeros_ip_firewall_filter.block_wan_input.id,
+      routeros_ip_firewall_filter.allow_established_related_forward.id,
+      routeros_ip_firewall_filter.drop_invalid_forward.id,
+    ],
+    values(routeros_ip_firewall_filter.allow_trusted_forward)[*].id,
+    [
+      routeros_ip_firewall_filter.allow_monitoring_blackbox.id,
+      routeros_ip_firewall_filter.block_wan_forward.id,
+    ],
+  )
 }
 
 # IP SERVICES CONFIGURATION
