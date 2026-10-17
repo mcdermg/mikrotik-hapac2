@@ -6,11 +6,16 @@ locals {
   # DHCP pool range
   dhcp_pool_range = "${var.dhcp.pool_start}-${var.dhcp.pool_end}"
 
-  # container image
+  # container image and IP without CIDR
   container_image = var.container.image
+  container_ip    = split("/", var.container.ip)[0]
 }
 
 # SYSTEM CONFIGURATION
+resource "routeros_system_identity" "identity" {
+  name = var.identity
+}
+
 resource "routeros_system_clock" "timezone" {
   time_zone_name = var.timezone
 }
@@ -208,14 +213,11 @@ resource "routeros_ip_firewall_filter" "allow_trusted_forward" {
   comment         = "Allow trusted ${each.key} to lab"
 }
 
-# TODO: blackbox_exporter_host is 192.168.1.250 (pve01) but the exporter is meant to run in the
-# ISP monitor container at 192.168.1.249. Nothing answers on 9115 at either IP. Check the container
-# on the router, then point this at .249 or drop the rule.
 resource "routeros_ip_firewall_filter" "allow_monitoring_blackbox" {
   chain       = "forward"
   action      = "accept"
   src_address = var.wan.cidr
-  dst_address = var.blackbox_exporter_host
+  dst_address = local.container_ip
   protocol    = "tcp"
   dst_port    = tostring(var.blackbox_exporter_port)
   comment     = "Allow monitoring to Blackbox Exporter"

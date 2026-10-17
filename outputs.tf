@@ -88,7 +88,7 @@
 ## MONITORING OUTPUTS
 #output "blackbox_exporter_endpoint" {
 #  description = "Blackbox Exporter endpoint for monitoring"
-#  value       = "${var.blackbox_exporter_host}:${var.blackbox_exporter_port}"
+#  value       = "${local.container_ip}:${var.blackbox_exporter_port}"
 #}
 #
 #output "monitoring_device_ip" {

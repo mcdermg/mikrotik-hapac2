@@ -279,7 +279,7 @@ services_to_disable = {
 - Ansible manages container/VM configuration
 
 ### With Monitoring
-- Blackbox Exporter at `192.168.1.250:9115`
+- Blackbox Exporter in the ISP monitor container at `192.168.1.249:9115`
 - RPi Zero at `192.168.0.62` for ISP-side monitoring
 - Firewall allows monitoring traffic from WAN to Blackbox
 

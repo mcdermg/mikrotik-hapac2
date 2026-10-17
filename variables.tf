@@ -23,6 +23,12 @@ variable "ssh_keys" {
 }
 
 # SYSTEM CONFIGURATION
+variable "identity" {
+  description = "Router identity (hostname)"
+  type        = string
+  default     = "MikroTik"
+}
+
 variable "timezone" {
   description = "System timezone"
   type        = string
@@ -120,11 +126,6 @@ variable "blackbox_exporter_port" {
   description = "Blackbox Exporter port for ISP monitoring"
   type        = number
   default     = 9115
-}
-
-variable "blackbox_exporter_host" {
-  description = "Blackbox Exporter host IP (MSI Cubi)"
-  type        = string
 }
 
 # SERVICE CONFIGURATION

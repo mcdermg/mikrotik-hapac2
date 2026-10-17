@@ -152,13 +152,13 @@ No modules.
 | [routeros_move_items.firewall_order](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/move_items) | resource |
 | [routeros_snmp.snmp_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/snmp) | resource |
 | [routeros_system_clock.timezone](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_clock) | resource |
+| [routeros_system_identity.identity](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_identity) | resource |
 | [routeros_system_user_sshkeys.ssh_keys](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_user_sshkeys) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
-| <a name="input_blackbox_exporter_host"></a> [blackbox\_exporter\_host](#input\_blackbox\_exporter\_host) | Blackbox Exporter host IP (MSI Cubi) | `string` | n/a | yes |
 | <a name="input_blackbox_exporter_port"></a> [blackbox\_exporter\_port](#input\_blackbox\_exporter\_port) | Blackbox Exporter port for ISP monitoring | `number` | `9115` | no |
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | Cloudflare API token for provider for backend | `string` | n/a | yes |
 | <a name="input_connection_tracking_udp_timeout"></a> [connection\_tracking\_udp\_timeout](#input\_connection\_tracking\_udp\_timeout) | UDP connection tracking timeout | `string` | `"10s"` | no |
@@ -169,6 +169,7 @@ No modules.
 | <a name="input_dhcp_dynamic_lease_identifiers"></a> [dhcp\_dynamic\_lease\_identifiers](#input\_dhcp\_dynamic\_lease\_identifiers) | Client identifiers the DHCP server uses to match dynamic leases | `string` | `"client-mac,client-id"` | no |
 | <a name="input_dns_allow_remote_requests"></a> [dns\_allow\_remote\_requests](#input\_dns\_allow\_remote\_requests) | Allow remote DNS requests | `bool` | `true` | no |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS server IP addresses | `list(string)` | <pre>[<br/>  "8.8.8.8",<br/>  "1.1.1.1"<br/>]</pre> | no |
+| <a name="input_identity"></a> [identity](#input\_identity) | Router identity (hostname) | `string` | `"MikroTik"` | no |
 | <a name="input_lan"></a> [lan](#input\_lan) | LAN configuration | <pre>object({<br/>    bridge_name  = string<br/>    cidr         = string<br/>    gateway      = string<br/>    bridge_ports = list(string)<br/>  })</pre> | n/a | yes |
 | <a name="input_mikrotik"></a> [mikrotik](#input\_mikrotik) | MikroTik connection configuration | <pre>object({<br/>    host     = string<br/>    username = string<br/>    password = string<br/>    insecure = bool<br/>  })</pre> | n/a | yes |
 | <a name="input_proxmox_port"></a> [proxmox\_port](#input\_proxmox\_port) | Proxmox port | `number` | `8006` | no |
