@@ -276,33 +276,14 @@ resource "routeros_ip_firewall_connection_tracking" "connection_tracking" {
 
 # CONTAINER CONFIGURATION
 
-#  TODO: Not needed container will create manually as far as I can tell via routeros / command
-# CREATE DIRECTORIES ON USB
-#resource "routeros_file" "container_pull_dir" {
-#  name = "usb1-part1/pull"
-#}
-#
-#resource "routeros_file" "container_layers_dir" {
-#  name = "usb1-part1/layers"
-#}
-#
-#resource "routeros_file" "container_root_dir" {
-#  name = "usb1-part1/monitor_isp"
-#}
-
 # CONTAINER CONFIG
-#resource "routeros_container_config" "registry" {
-#  registry_url = var.container_registry_url
-#  tmpdir       = "usb1-part1/pull"
-#  layer_dir    = "usb1-part1/layers"
-#  # TODO: Provider is usiong wrong naming its memory-high
-#  #ram_high     = "0"
-#  #memory-high   = "0"
-#  depends_on = [
-#    #routeros_file.container_pull_dir,
-#    #routeros_file.container_layers_dir
-#  ]
-#}
+# RouterOS creates tmpdir, layer_dir and root_dir on the USB disk itself.
+# ram_high is left unset: the provider sends ram-high, which RouterOS 7.20 renamed to memory-high.
+resource "routeros_container_config" "registry" {
+  registry_url = var.container_registry_url
+  tmpdir       = "${var.container_disk}/pull"
+  layer_dir    = "${var.container_disk}/layers"
+}
 
 # VETH INTERFACE FOR CONTAINER
 resource "routeros_interface_veth" "veth_container" {
@@ -325,18 +306,17 @@ resource "routeros_interface_bridge_port" "veth_container" {
 resource "routeros_container" "monitor_isp" {
   interface     = routeros_interface_veth.veth_container.name
   remote_image  = local.container_image
-  root_dir      = "usb1-part1/monitor_isp"
+  root_dir      = "${var.container_disk}/monitor_isp"
   start_on_boot = var.container.start_on_boot
+  running       = true
   comment       = "ISP monitoring container with Blackbox Exporter"
   depends_on = [
     routeros_interface_veth.veth_container,
     routeros_interface_bridge_port.veth_container,
-    #routeros_file.container_root_dir
-    #routeros_container_config.registry,
+    routeros_container_config.registry,
   ]
   lifecycle {
     ignore_changes = [
-      running,
       stop_signal,
     ]
   }

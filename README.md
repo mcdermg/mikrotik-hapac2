@@ -128,7 +128,7 @@ resource "routeros_container_config" "config" {
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.13 |
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 5.0 |
 | <a name="requirement_routeros"></a> [routeros](#requirement\_routeros) | 1.99.1 |
@@ -136,7 +136,7 @@ resource "routeros_container_config" "config" {
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_routeros"></a> [routeros](#provider\_routeros) | 1.99.1 |
 
 ## Modules
@@ -146,8 +146,9 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [routeros_container.monitor_isp](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/container) | resource |
+| [routeros_container_config.registry](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/container_config) | resource |
 | [routeros_interface_bridge.bridge_lan](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/interface_bridge) | resource |
 | [routeros_interface_bridge_port.lan_ports](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/interface_bridge_port) | resource |
 | [routeros_interface_bridge_port.veth_container](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/interface_bridge_port) | resource |
@@ -183,26 +184,28 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_blackbox_exporter_host"></a> [blackbox\_exporter\_host](#input\_blackbox\_exporter\_host) | Blackbox Exporter host IP (MSI Cubi) | `string` | n/a | yes |
 | <a name="input_blackbox_exporter_port"></a> [blackbox\_exporter\_port](#input\_blackbox\_exporter\_port) | Blackbox Exporter port for ISP monitoring | `number` | `9115` | no |
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | Cloudflare API token for provider for backend | `string` | n/a | yes |
 | <a name="input_connection_tracking_udp_timeout"></a> [connection\_tracking\_udp\_timeout](#input\_connection\_tracking\_udp\_timeout) | UDP connection tracking timeout | `string` | `"10s"` | no |
-| <a name="input_container"></a> [container](#input\_container) | Container configuration | <pre>object({<br>    veth_name     = string<br>    ip            = string<br>    gateway       = string<br>    image         = string<br>    start_on_boot = bool<br>  })</pre> | n/a | yes |
-| <a name="input_dhcp"></a> [dhcp](#input\_dhcp) | DHCP configuration | <pre>object({<br>    pool_name   = string<br>    pool_start  = string<br>    pool_end    = string<br>    server_name = string<br>  })</pre> | n/a | yes |
+| <a name="input_container"></a> [container](#input\_container) | Container configuration | <pre>object({<br/>    veth_name     = string<br/>    ip            = string<br/>    gateway       = string<br/>    image         = string<br/>    start_on_boot = bool<br/>  })</pre> | n/a | yes |
+| <a name="input_container_disk"></a> [container\_disk](#input\_container\_disk) | Disk holding container layers, tmpdir and root dirs | `string` | `"usb1-part1"` | no |
+| <a name="input_container_registry_url"></a> [container\_registry\_url](#input\_container\_registry\_url) | Container registry URL | `string` | `"https://ghcr.io"` | no |
+| <a name="input_dhcp"></a> [dhcp](#input\_dhcp) | DHCP configuration | <pre>object({<br/>    pool_name   = string<br/>    pool_start  = string<br/>    pool_end    = string<br/>    server_name = string<br/>  })</pre> | n/a | yes |
 | <a name="input_dns_allow_remote_requests"></a> [dns\_allow\_remote\_requests](#input\_dns\_allow\_remote\_requests) | Allow remote DNS requests | `bool` | `true` | no |
-| <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS server IP addresses | `list(string)` | <pre>[<br>  "8.8.8.8",<br>  "1.1.1.1"<br>]</pre> | no |
-| <a name="input_lan"></a> [lan](#input\_lan) | LAN configuration | <pre>object({<br>    bridge_name  = string<br>    cidr         = string<br>    gateway      = string<br>    bridge_ports = list(string)<br>  })</pre> | n/a | yes |
-| <a name="input_mikrotik"></a> [mikrotik](#input\_mikrotik) | MikroTik connection configuration | <pre>object({<br>    host     = string<br>    username = string<br>    password = string<br>    insecure = bool<br>  })</pre> | n/a | yes |
+| <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS server IP addresses | `list(string)` | <pre>[<br/>  "8.8.8.8",<br/>  "1.1.1.1"<br/>]</pre> | no |
+| <a name="input_lan"></a> [lan](#input\_lan) | LAN configuration | <pre>object({<br/>    bridge_name  = string<br/>    cidr         = string<br/>    gateway      = string<br/>    bridge_ports = list(string)<br/>  })</pre> | n/a | yes |
+| <a name="input_mikrotik"></a> [mikrotik](#input\_mikrotik) | MikroTik connection configuration | <pre>object({<br/>    host     = string<br/>    username = string<br/>    password = string<br/>    insecure = bool<br/>  })</pre> | n/a | yes |
 | <a name="input_proxmox_port"></a> [proxmox\_port](#input\_proxmox\_port) | Proxmox port | `number` | `8006` | no |
-| <a name="input_routeros_ip_cloud"></a> [routeros\_ip\_cloud](#input\_routeros\_ip\_cloud) | Cloud/DDNS configuration | <pre>object({<br>    back_to_home_vpn     = string<br>    ddns_enabled         = string<br>    ddns_update_interval = string<br>    update_time          = bool<br>  })</pre> | <pre>{<br>  "back_to_home_vpn": "enabled",<br>  "ddns_enabled": "yes",<br>  "ddns_update_interval": "5m",<br>  "update_time": true<br>}</pre> | no |
-| <a name="input_services_to_disable"></a> [services\_to\_disable](#input\_services\_to\_disable) | Map of services to disable with their port numbers | <pre>map(object({<br>    port    = number<br>    comment = string<br>  }))</pre> | <pre>{<br>  "ftp": {<br>    "comment": "FTP service",<br>    "port": 21<br>  },<br>  "telnet": {<br>    "comment": "Telnet service",<br>    "port": 23<br>  },<br>  "www": {<br>    "comment": "HTTP web service",<br>    "port": 80<br>  }<br>}</pre> | no |
+| <a name="input_routeros_ip_cloud"></a> [routeros\_ip\_cloud](#input\_routeros\_ip\_cloud) | Cloud/DDNS configuration | <pre>object({<br/>    back_to_home_vpn     = string<br/>    ddns_enabled         = string<br/>    ddns_update_interval = string<br/>    update_time          = bool<br/>  })</pre> | <pre>{<br/>  "back_to_home_vpn": "enabled",<br/>  "ddns_enabled": "yes",<br/>  "ddns_update_interval": "5m",<br/>  "update_time": true<br/>}</pre> | no |
+| <a name="input_services_to_disable"></a> [services\_to\_disable](#input\_services\_to\_disable) | Map of services to disable with their port numbers | <pre>map(object({<br/>    port    = number<br/>    comment = string<br/>  }))</pre> | <pre>{<br/>  "ftp": {<br/>    "comment": "FTP service",<br/>    "port": 21<br/>  },<br/>  "telnet": {<br/>    "comment": "Telnet service",<br/>    "port": 23<br/>  },<br/>  "www": {<br/>    "comment": "HTTP web service",<br/>    "port": 80<br/>  }<br/>}</pre> | no |
 | <a name="input_snmp_enabled"></a> [snmp\_enabled](#input\_snmp\_enabled) | Enable SNMP monitoring | `bool` | `true` | no |
 | <a name="input_ssh_keys"></a> [ssh\_keys](#input\_ssh\_keys) | Public SSH keys for the MikroTik user, keyed by machine name | `map(string)` | n/a | yes |
-| <a name="input_static_leases"></a> [static\_leases](#input\_static\_leases) | Static DHCP lease assignments | <pre>map(object({<br>    ip_address  = string<br>    mac_address = string<br>    comment     = string<br>  }))</pre> | n/a | yes |
+| <a name="input_static_leases"></a> [static\_leases](#input\_static\_leases) | Static DHCP lease assignments | <pre>map(object({<br/>    ip_address  = string<br/>    mac_address = string<br/>    comment     = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | System timezone | `string` | `"America/Argentina/Buenos_Aires"` | no |
 | <a name="input_trusted_devices"></a> [trusted\_devices](#input\_trusted\_devices) | MAC addresses on the ISP network allowed into the router and the lab, keyed by device name. The `android` key is also used by the Proxmox dst-nat rule | `map(string)` | n/a | yes |
-| <a name="input_wan"></a> [wan](#input\_wan) | WAN configuration | <pre>object({<br>    interface    = string<br>    cidr         = string<br>    interface_ip = string<br>    gateway      = string<br>  })</pre> | n/a | yes |
+| <a name="input_wan"></a> [wan](#input\_wan) | WAN configuration | <pre>object({<br/>    interface    = string<br/>    cidr         = string<br/>    interface_ip = string<br/>    gateway      = string<br/>  })</pre> | n/a | yes |
 
 ## Outputs
 

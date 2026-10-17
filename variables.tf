@@ -176,12 +176,17 @@ variable "connection_tracking_udp_timeout" {
   default     = "10s"
 }
 
-# TODO: for `routeros_container_config` resources that is currently broken in provider
-#variable "container_registry_url" {
-#  description = "Container registry URL"
-#  type        = string
-#  default     = "https://ghcr.io"
-#}
+variable "container_registry_url" {
+  description = "Container registry URL"
+  type        = string
+  default     = "https://ghcr.io"
+}
+
+variable "container_disk" {
+  description = "Disk holding container layers, tmpdir and root dirs"
+  type        = string
+  default     = "usb1-part1"
+}
 
 variable "proxmox_port" {
   description = "Proxmox port"
