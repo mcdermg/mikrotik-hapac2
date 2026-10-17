@@ -302,6 +302,8 @@ resource "routeros_interface_bridge_port" "veth_container" {
 }
 
 # CONTAINER
+# TODO: set restart_policy = "on-failure" once the provider supports it (RouterOS 7.24+, not in provider 1.99.1).
+# Set by hand until then: /container set [find] restart-policy=on-failure
 resource "routeros_container" "monitor_isp" {
   interface     = routeros_interface_veth.veth_container.name
   remote_image  = local.container_image
