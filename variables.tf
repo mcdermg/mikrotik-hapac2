@@ -122,12 +122,6 @@ variable "trusted_devices" {
   type        = map(string)
 }
 
-variable "blackbox_exporter_port" {
-  description = "Blackbox Exporter port for ISP monitoring"
-  type        = number
-  default     = 9115
-}
-
 # SERVICE CONFIGURATION
 variable "services_to_disable" {
   description = "Map of services to disable with their port numbers"

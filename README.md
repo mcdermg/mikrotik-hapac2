@@ -137,7 +137,6 @@ No modules.
 | [routeros_ip_firewall_filter.allow_established_related](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_established_related_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_icmp_input](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
-| [routeros_ip_firewall_filter.allow_monitoring_blackbox](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_trusted_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_trusted_input](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.block_wan_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
@@ -159,7 +158,6 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
-| <a name="input_blackbox_exporter_port"></a> [blackbox\_exporter\_port](#input\_blackbox\_exporter\_port) | Blackbox Exporter port for ISP monitoring | `number` | `9115` | no |
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | Cloudflare API token for provider for backend | `string` | n/a | yes |
 | <a name="input_connection_tracking_udp_timeout"></a> [connection\_tracking\_udp\_timeout](#input\_connection\_tracking\_udp\_timeout) | UDP connection tracking timeout | `string` | `"10s"` | no |
 | <a name="input_container"></a> [container](#input\_container) | Container configuration | <pre>object({<br/>    veth_name     = string<br/>    ip            = string<br/>    gateway       = string<br/>    image         = string<br/>    start_on_boot = bool<br/>  })</pre> | n/a | yes |

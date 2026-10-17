@@ -86,11 +86,6 @@
 #}
 #
 ## MONITORING OUTPUTS
-#output "blackbox_exporter_endpoint" {
-#  description = "Blackbox Exporter endpoint for monitoring"
-#  value       = "${local.container_ip}:${var.blackbox_exporter_port}"
-#}
-#
 #output "monitoring_device_ip" {
 #  description = "ISP monitoring device IP (RPi Zero on WAN)"
 #  value       = var.rpi_zero_ip

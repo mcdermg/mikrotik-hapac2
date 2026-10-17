@@ -6,9 +6,8 @@ locals {
   # DHCP pool range
   dhcp_pool_range = "${var.dhcp.pool_start}-${var.dhcp.pool_end}"
 
-  # container image and IP without CIDR
+  # container image
   container_image = var.container.image
-  container_ip    = split("/", var.container.ip)[0]
 }
 
 # SYSTEM CONFIGURATION
@@ -213,16 +212,6 @@ resource "routeros_ip_firewall_filter" "allow_trusted_forward" {
   comment         = "Allow trusted ${each.key} to lab"
 }
 
-resource "routeros_ip_firewall_filter" "allow_monitoring_blackbox" {
-  chain       = "forward"
-  action      = "accept"
-  src_address = var.wan.cidr
-  dst_address = local.container_ip
-  protocol    = "tcp"
-  dst_port    = tostring(var.blackbox_exporter_port)
-  comment     = "Allow monitoring to Blackbox Exporter"
-}
-
 # dst-nat is excluded so the Android to Proxmox NAT rule keeps working
 resource "routeros_ip_firewall_filter" "block_wan_forward" {
   chain                = "forward"
@@ -249,7 +238,6 @@ resource "routeros_move_items" "firewall_order" {
     ],
     values(routeros_ip_firewall_filter.allow_trusted_forward)[*].id,
     [
-      routeros_ip_firewall_filter.allow_monitoring_blackbox.id,
       routeros_ip_firewall_filter.block_wan_forward.id,
     ],
   )

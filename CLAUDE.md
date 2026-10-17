@@ -138,8 +138,7 @@ Forward:
 1. Allow established/related/untracked
 2. Drop invalid
 3. Allow trusted devices to the lab (per MAC)
-4. Allow specific forwards (Blackbox)
-5. DROP new WAN connections that are not dst-nat (MUST BE LAST forward rule)
+4. DROP new WAN connections that are not dst-nat (MUST BE LAST forward rule)
 
 New rules are appended to the end of the list on the router, so every rule must be added to the `sequence` or it lands after the drops.
 
@@ -281,7 +280,7 @@ services_to_disable = {
 ### With Monitoring
 - Blackbox Exporter in the ISP monitor container at `192.168.1.249:9115`
 - RPi Zero at `192.168.0.62` for ISP-side monitoring
-- Firewall allows monitoring traffic from WAN to Blackbox
+- The Zero reaches Blackbox through its `trusted_devices` forward rule; there is no separate Blackbox rule
 
 ## User Preferences
 
