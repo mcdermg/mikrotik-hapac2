@@ -91,10 +91,11 @@ resource "routeros_ip_pool" "lan_pool" {
 }
 
 resource "routeros_ip_dhcp_server" "dhcp_lan" {
-  name         = var.dhcp.server_name
-  interface    = routeros_interface_bridge.bridge_lan.name
-  address_pool = routeros_ip_pool.lan_pool.name
-  disabled     = false
+  name                      = var.dhcp.server_name
+  interface                 = routeros_interface_bridge.bridge_lan.name
+  address_pool              = routeros_ip_pool.lan_pool.name
+  dynamic_lease_identifiers = var.dhcp_dynamic_lease_identifiers
+  disabled                  = false
   depends_on = [
     routeros_ip_pool.lan_pool,
     routeros_interface_bridge.bridge_lan
@@ -277,8 +278,6 @@ resource "routeros_ip_firewall_connection_tracking" "connection_tracking" {
 # CONTAINER CONFIGURATION
 
 # CONTAINER CONFIG
-# RouterOS creates tmpdir, layer_dir and root_dir on the USB disk itself.
-# ram_high is left unset: the provider sends ram-high, which RouterOS 7.20 renamed to memory-high.
 resource "routeros_container_config" "registry" {
   registry_url = var.container_registry_url
   tmpdir       = "${var.container_disk}/pull"
@@ -308,7 +307,6 @@ resource "routeros_container" "monitor_isp" {
   remote_image  = local.container_image
   root_dir      = "${var.container_disk}/monitor_isp"
   start_on_boot = var.container.start_on_boot
-  running       = true
   comment       = "ISP monitoring container with Blackbox Exporter"
   depends_on = [
     routeros_interface_veth.veth_container,
@@ -316,7 +314,9 @@ resource "routeros_container" "monitor_isp" {
     routeros_container_config.registry,
   ]
   lifecycle {
+    # Provider 1.99.1 reads running from a status field RouterOS 7.20+ no longer returns
     ignore_changes = [
+      running,
       stop_signal,
     ]
   }

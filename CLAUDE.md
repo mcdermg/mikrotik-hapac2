@@ -1,8 +1,8 @@
-# MikroTik RouterOS Terraform Project
+# MikroTik RouterOS OpenTofu Project
 
 ## Project Overview
 
-This is a Terraform project for managing a MikroTik RBD52G-5HacD2HnD router (RouterOS 7.20.1) using Infrastructure as Code. The project manages network configuration, firewall rules, DHCP, NAT, containers, and cloud services for a homelab environment.
+This is an OpenTofu project for managing a MikroTik RBD52G-5HacD2HnD router (RouterOS 7.20.1) using Infrastructure as Code. The project manages network configuration, firewall rules, DHCP, NAT, containers, and cloud services for a homelab environment. Use `tofu` (aliased to `tf`), never `terraform`: the state and lock file are OpenTofu-only.
 
 ## Network Architecture
 
@@ -48,7 +48,7 @@ Static leases sit outside the DHCP pool. Nothing static or in the MetalLB range 
 .
 ├── main.tf                    # All resource definitions
 ├── variables.tf               # Variable definitions with defaults
-├── versions.tf                # Provider and Terraform version config
+├── versions.tf                # OpenTofu version (language block), provider constraints and config
 ├── outputs.tf                 # Output definitions
 ├── terraform.tfvars           # Variable values (gitignored, local only)
 ├── .gitignore                 # Git ignore patterns
@@ -109,12 +109,12 @@ Static leases sit outside the DHCP pool. Nothing static or in the MetalLB range 
 
 ### API Access
 
-Terraform connects via `api://` (port 8728), so the API service must be enabled:
+OpenTofu connects via `api://` (port 8728), so the API service must be enabled:
 ```routeros
 /ip service enable api
 ```
 
-Terraform does NOT disable `api`/`api-ssl` (those entries are commented out in `services_to_disable`), since doing so would lock Terraform out.
+OpenTofu does NOT disable `api`/`api-ssl` (those entries are commented out in `services_to_disable`), since doing so would lock OpenTofu out.
 
 ### Container Setup
 
@@ -195,7 +195,7 @@ static_leases = {
 }
 ```
 
-2. Run `terraform apply` - the `for_each` will handle it
+2. Run `tofu apply` - the `for_each` will handle it
 
 ### Changing Network Scheme
 
@@ -238,7 +238,7 @@ services_to_disable = {
 ❌ **Forgetting to add a new firewall rule to `routeros_move_items.firewall_order`**
 ❌ **Using inline values instead of variables in resources**
 
-## Terraform Best Practices
+## OpenTofu Best Practices
 
 ### State Management
 - Use remote state for production (GCS, S3, Terraform Cloud)
@@ -247,20 +247,20 @@ services_to_disable = {
 
 ### Workflow
 1. Edit variables or resources
-2. Run `terraform fmt` to format
-3. Run `terraform validate` to check syntax
-4. Run `terraform plan` to preview changes
-5. Run `terraform apply` to implement
+2. Run `tofu fmt` to format
+3. Run `tofu validate` to check syntax
+4. Run `tofu plan` to preview changes
+5. Run `tofu apply` to implement
 6. Commit `.tf` files (NOT `.tfvars`) to git
 
 ### Provider Version
-- Terraform `~> 1.13`, provider `terraform-routeros/routeros` pinned to `1.99.1`
+- OpenTofu `~> 1.12` (`language` block in `versions.tf`), provider `terraform-routeros/routeros` pinned to `1.99.1`
 - Pin versions in production
 - Test updates in non-production first
 
 ## Security Considerations
 
-1. **API Access**: Only enable when running Terraform
+1. **API Access**: Only enable when running OpenTofu
 2. **Firewall Order**: Critical for security - never break rule order
 3. **Service Hardening**: Disable unnecessary services
 4. **Credentials**: Use `sensitive = true` for password variables
@@ -270,11 +270,11 @@ services_to_disable = {
 
 ### With Proxmox
 - Proxmox host at `192.168.1.250`
-- Can use Terraform outputs for Proxmox provider inputs
+- Can use OpenTofu outputs for Proxmox provider inputs
 - Consider dynamic inventory for Ansible
 
 ### With Ansible
-- Export outputs as JSON: `terraform output -json > ansible/inventory/terraform.json` (NOTE: all outputs in `outputs.tf` are currently commented out)
+- Export outputs as JSON: `tofu output -json > ansible/inventory/terraform.json` (NOTE: all outputs in `outputs.tf` are currently commented out)
 - Use outputs for inventory generation
 - Ansible manages container/VM configuration
 
@@ -299,7 +299,7 @@ services_to_disable = {
 4. Always preserve firewall rule ordering
 5. Always keep comments simple and clean
 6. Never create resources for cloud-managed infrastructure
-7. Test changes with `terraform plan` before committing
-8. NEVER run terraform apply
-9. NEVER run terraform destroy
-10. NEVER run terraform destroy -auto-approve
+7. Test changes with `tofu plan` before committing
+8. NEVER run tofu apply
+9. NEVER run tofu destroy
+10. NEVER run tofu destroy -auto-approve

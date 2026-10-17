@@ -83,6 +83,12 @@ variable "dhcp" {
   })
 }
 
+variable "dhcp_dynamic_lease_identifiers" {
+  description = "Client identifiers the DHCP server uses to match dynamic leases"
+  type        = string
+  default     = "client-mac,client-id"
+}
+
 variable "static_leases" {
   description = "Static DHCP lease assignments"
   type = map(object({
@@ -185,7 +191,7 @@ variable "container_registry_url" {
 variable "container_disk" {
   description = "Disk holding container layers, tmpdir and root dirs"
   type        = string
-  default     = "usb1-part1"
+  default     = "/usb1-part1"
 }
 
 variable "proxmox_port" {

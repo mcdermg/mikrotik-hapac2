@@ -21,8 +21,8 @@ The keys are from an R2 Account API token (R2 Object Storage → Account Details
 To set up on a new machine:
 
 1. Create `.envrc` as above and run `direnv allow`
-2. `terraform init`
-3. `terraform plan -compact-warnings` and confirm no unexpected changes
+2. `tofu init`
+3. `tofu plan -compact-warnings` and confirm no unexpected changes
 
 ## Lab IP Layout
 Layout for `192.168.1.0/24`. The DHCP pool and static leases are set in `terraform.tfvars`.
@@ -56,16 +56,15 @@ The process for resetting and allowing this IaC to be able to run is as follows:
 8. `ssh-keygen -f "/home/gary/.ssh/known_hosts" -R "192.168.0.98"`
 9. ssh to the router via `ssh gary@192.168.0.98`
 10. `/user set admin disabled=yes`
-11. Import existing resources into Terraform state:
+11. Import existing resources into OpenTofu state:
 ```bash
-terraform import routeros_ip_address.wan_address "*1"
+tofu import routeros_ip_address.wan_address "*1"
 ```
-12. `/container config set registry-url=https://ghcr.io tmpdir=usb1-part1/pull layer-dir=usb1-part1/layers` There is an issue with TF provider not creating resource [container_config](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/container_config)
-13. `terraform plan -compact-warnings`
-14. `terraform apply -compact-warnings`
+12. `tofu plan -compact-warnings`
+13. `tofu apply -compact-warnings`
 
 ## Administration Device Change
-If switching main device for Terraform and accessing the router then the values for the IP and MAC address present in the rules need to be updated. Terraform won't be able to access after a change so ssh access via `ssh user@routerIP` with associated password will allow access and then update rules via:
+If switching main device for OpenTofu and accessing the router then the values for the IP and MAC address present in the rules need to be updated. OpenTofu won't be able to access after a change so ssh access via `ssh user@routerIP` with associated password will allow access and then update rules via:
 
 ```
 /ip firewall filter set [find comment="Allow laptop by MAC"] src-mac-address=XX:YY:11:22:33:AA
@@ -73,7 +72,7 @@ If switching main device for Terraform and accessing the router then the values 
 /ip firewall filter set [find comment="Allow laptop by IP"] src-address=XXX.XXX.XXX.XXX
 ```
 
-**NOTE**: MAC address should use all uppercase for letters otherwise Terraform will throw an error via the provider and its validation.
+**NOTE**: MAC address should use all uppercase for letters otherwise OpenTofu will throw an error via the provider and its validation.
 
 To verify run:
 
@@ -99,37 +98,11 @@ sudo ip route add 192.168.1.0/24 via 192.168.0.98
 
 **NOTE:** This is not persistent on device reboot.
 
-### Terraform issues
-
-#### Container Config
-There appears to be an issue with [container_config](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/container_config) as the `ram_high` element generates an error on any apply.
-
-```
-│ Error: from RouterOS device: unknown parameter ram-high
-│
-│   with routeros_container_config.registry,
-│   on main.tf line 290, in resource "routeros_container_config" "registry":
-│  290: resource "routeros_container_config" "registry" {
-│
-```
-
-The provider has an [example](https://github.com/terraform-routeros/terraform-provider-routeros/blob/main/examples/resources/routeros_container_config/resource.tf) of:
-
-```
-resource "routeros_container_config" "config" {
-  registry_url = "https://registry-1.docker.io"
-  ram_high     = "0"
-  tmpdir       = "/usb1-part1/containers/tmp"
-  layer_dir    = "/usb1-part1/containers/layers"
-}
-```
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 | ---- | ------- |
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.13 |
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 5.0 |
 | <a name="requirement_routeros"></a> [routeros](#requirement\_routeros) | 1.99.1 |
 
@@ -190,9 +163,10 @@ No modules.
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | Cloudflare API token for provider for backend | `string` | n/a | yes |
 | <a name="input_connection_tracking_udp_timeout"></a> [connection\_tracking\_udp\_timeout](#input\_connection\_tracking\_udp\_timeout) | UDP connection tracking timeout | `string` | `"10s"` | no |
 | <a name="input_container"></a> [container](#input\_container) | Container configuration | <pre>object({<br/>    veth_name     = string<br/>    ip            = string<br/>    gateway       = string<br/>    image         = string<br/>    start_on_boot = bool<br/>  })</pre> | n/a | yes |
-| <a name="input_container_disk"></a> [container\_disk](#input\_container\_disk) | Disk holding container layers, tmpdir and root dirs | `string` | `"usb1-part1"` | no |
+| <a name="input_container_disk"></a> [container\_disk](#input\_container\_disk) | Disk holding container layers, tmpdir and root dirs | `string` | `"/usb1-part1"` | no |
 | <a name="input_container_registry_url"></a> [container\_registry\_url](#input\_container\_registry\_url) | Container registry URL | `string` | `"https://ghcr.io"` | no |
 | <a name="input_dhcp"></a> [dhcp](#input\_dhcp) | DHCP configuration | <pre>object({<br/>    pool_name   = string<br/>    pool_start  = string<br/>    pool_end    = string<br/>    server_name = string<br/>  })</pre> | n/a | yes |
+| <a name="input_dhcp_dynamic_lease_identifiers"></a> [dhcp\_dynamic\_lease\_identifiers](#input\_dhcp\_dynamic\_lease\_identifiers) | Client identifiers the DHCP server uses to match dynamic leases | `string` | `"client-mac,client-id"` | no |
 | <a name="input_dns_allow_remote_requests"></a> [dns\_allow\_remote\_requests](#input\_dns\_allow\_remote\_requests) | Allow remote DNS requests | `bool` | `true` | no |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS server IP addresses | `list(string)` | <pre>[<br/>  "8.8.8.8",<br/>  "1.1.1.1"<br/>]</pre> | no |
 | <a name="input_lan"></a> [lan](#input\_lan) | LAN configuration | <pre>object({<br/>    bridge_name  = string<br/>    cidr         = string<br/>    gateway      = string<br/>    bridge_ports = list(string)<br/>  })</pre> | n/a | yes |

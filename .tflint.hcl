@@ -60,3 +60,8 @@ rule "terraform_standard_module_structure" {
 rule "terraform_workspace_remote" {
   enabled = true
 }
+
+# OpenTofu ignores required_version; versions.tf pins it with a language block instead
+rule "terraform_required_version" {
+  enabled = false
+}
