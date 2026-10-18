@@ -64,12 +64,24 @@ variable "lan" {
 
 # DNS CONFIGURATION
 variable "dns_servers" {
-  description = "DNS server IP addresses"
+  description = "Upstream DNS servers the router forwards to for every name outside the internal domain (Cloudflare)"
   type        = list(string)
   default = [
-    "8.8.8.8",
     "1.1.1.1",
+    "1.0.0.1",
   ]
+}
+
+variable "internal_dns" {
+  description = "Internal domain and the bind9 servers that hold its zones (homelab-proxmox, CT 115 and CT 119). The router forwards the domain and the LAN's reverse zone to them"
+  type = object({
+    domain  = string
+    servers = list(string)
+  })
+  default = {
+    domain  = "homelab.local"
+    servers = ["192.168.1.115", "192.168.1.119"]
+  }
 }
 
 variable "dns_allow_remote_requests" {

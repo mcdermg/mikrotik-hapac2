@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is an OpenTofu project for managing a MikroTik RBD52G-5HacD2HnD router (RouterOS 7.20.1) using Infrastructure as Code. The project manages network configuration, firewall rules, DHCP, NAT, containers, and cloud services for a homelab environment. Use `tofu` (aliased to `tf`), never `terraform`: the state and lock file are OpenTofu-only.
+This is an OpenTofu project for managing a MikroTik RBD52G-5HacD2HnD router (RouterOS 7.24.5) using Infrastructure as Code. The project manages network configuration, firewall rules, DHCP, NAT, containers, and cloud services for a homelab environment. Use `tofu` (aliased to `tf`), never `terraform`: the state and lock file are OpenTofu-only.
 
 ## Network Architecture
 

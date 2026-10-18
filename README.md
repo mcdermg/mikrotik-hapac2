@@ -133,6 +133,8 @@ No modules.
 | [routeros_ip_dhcp_server_lease.static_leases](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dhcp_server_lease) | resource |
 | [routeros_ip_dhcp_server_network.lan_network](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dhcp_server_network) | resource |
 | [routeros_ip_dns.dns_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dns) | resource |
+| [routeros_ip_dns_forwarders.internal](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dns_forwarders) | resource |
+| [routeros_ip_dns_record.internal_fwd](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_dns_record) | resource |
 | [routeros_ip_firewall_connection_tracking.connection_tracking](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_connection_tracking) | resource |
 | [routeros_ip_firewall_filter.allow_established_related](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
 | [routeros_ip_firewall_filter.allow_established_related_forward](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_firewall_filter) | resource |
@@ -166,8 +168,9 @@ No modules.
 | <a name="input_dhcp"></a> [dhcp](#input\_dhcp) | DHCP configuration | <pre>object({<br/>    pool_name   = string<br/>    pool_start  = string<br/>    pool_end    = string<br/>    server_name = string<br/>  })</pre> | n/a | yes |
 | <a name="input_dhcp_dynamic_lease_identifiers"></a> [dhcp\_dynamic\_lease\_identifiers](#input\_dhcp\_dynamic\_lease\_identifiers) | Client identifiers the DHCP server uses to match dynamic leases | `string` | `"client-mac,client-id"` | no |
 | <a name="input_dns_allow_remote_requests"></a> [dns\_allow\_remote\_requests](#input\_dns\_allow\_remote\_requests) | Allow remote DNS requests | `bool` | `true` | no |
-| <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS server IP addresses | `list(string)` | <pre>[<br/>  "8.8.8.8",<br/>  "1.1.1.1"<br/>]</pre> | no |
+| <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | Upstream DNS servers the router forwards to for every name outside the internal domain (Cloudflare) | `list(string)` | <pre>[<br/>  "1.1.1.1",<br/>  "1.0.0.1"<br/>]</pre> | no |
 | <a name="input_identity"></a> [identity](#input\_identity) | Router identity (hostname) | `string` | `"MikroTik"` | no |
+| <a name="input_internal_dns"></a> [internal\_dns](#input\_internal\_dns) | Internal domain and the bind9 servers that hold its zones (homelab-proxmox, CT 115 and CT 119). The router forwards the domain and the LAN's reverse zone to them | <pre>object({<br/>    domain  = string<br/>    servers = list(string)<br/>  })</pre> | <pre>{<br/>  "domain": "homelab.local",<br/>  "servers": [<br/>    "192.168.1.115",<br/>    "192.168.1.119"<br/>  ]<br/>}</pre> | no |
 | <a name="input_lan"></a> [lan](#input\_lan) | LAN configuration | <pre>object({<br/>    bridge_name  = string<br/>    cidr         = string<br/>    gateway      = string<br/>    bridge_ports = list(string)<br/>  })</pre> | n/a | yes |
 | <a name="input_mikrotik"></a> [mikrotik](#input\_mikrotik) | MikroTik connection configuration | <pre>object({<br/>    host     = string<br/>    username = string<br/>    password = string<br/>    insecure = bool<br/>  })</pre> | n/a | yes |
 | <a name="input_proxmox_port"></a> [proxmox\_port](#input\_proxmox\_port) | Proxmox port | `number` | `8006` | no |

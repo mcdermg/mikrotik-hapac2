@@ -6,6 +6,13 @@ locals {
   # DHCP pool range
   dhcp_pool_range = "${var.dhcp.pool_start}-${var.dhcp.pool_end}"
 
+  # Zones the router forwards to bind9: the internal domain and the LAN's reverse zone (192.168.1.0/24 -> 1.168.192.in-addr.arpa)
+  # shortcut: the reverse zone name assumes a /24 LAN, derive it from the prefix length if the LAN ever changes size
+  internal_dns_zones = toset([
+    var.internal_dns.domain,
+    "${join(".", reverse(slice(split(".", split("/", var.lan.cidr)[0]), 0, 3)))}.in-addr.arpa",
+  ])
+
   # container image
   container_image = var.container.image
 }
@@ -86,6 +93,22 @@ resource "routeros_ip_dns" "dns_settings" {
   allow_remote_requests = var.dns_allow_remote_requests
 }
 
+# Internal names go to the bind9 pair (used round-robin), everything else to var.dns_servers
+resource "routeros_ip_dns_forwarders" "internal" {
+  name        = "internal"
+  dns_servers = var.internal_dns.servers
+}
+
+resource "routeros_ip_dns_record" "internal_fwd" {
+  for_each = local.internal_dns_zones
+
+  type            = "FWD"
+  name            = each.key
+  forward_to      = routeros_ip_dns_forwarders.internal.name
+  match_subdomain = true
+  comment         = "Internal zone to bind9"
+}
+
 # DHCP CONFIGURATION
 resource "routeros_ip_pool" "lan_pool" {
   name = var.dhcp.pool_name
@@ -107,9 +130,11 @@ resource "routeros_ip_dhcp_server" "dhcp_lan" {
 }
 
 resource "routeros_ip_dhcp_server_network" "lan_network" {
-  address    = var.lan.cidr
-  gateway    = local.lan_gateway_ip
-  dns_server = var.dns_servers
+  address = var.lan.cidr
+  gateway = local.lan_gateway_ip
+  # Clients ask the router, which knows both the internal and the public names
+  dns_server = [local.lan_gateway_ip]
+  domain     = var.internal_dns.domain
   depends_on = [
     routeros_ip_dhcp_server.dhcp_lan
   ]
