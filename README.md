@@ -33,7 +33,7 @@ Layout for `192.168.1.0/24`. The DHCP pool and static leases are set in `terrafo
 | `.2`–`.9` | Network gear (spare) |
 | `.10`–`.49` | k8s LoadBalancer pool (MetalLB) |
 | `.50`–`.99` | DHCP pool |
-| `.100`–`.199` | LXCs (VMID = last octet) |
+| `.100`–`.199` | LXCs (VMID = last octet), except `.153`: the bind9 floating DNS IP (keepalived) |
 | `.200`–`.239` | k3s VMs (VMID = last octet) |
 | `.240`–`.248` | Pis and other physical hosts (Pi 4 `.241`, Pi 3 `.242`) |
 | `.249` | MikroTik ISP monitor container |
@@ -170,7 +170,7 @@ No modules.
 | <a name="input_dns_allow_remote_requests"></a> [dns\_allow\_remote\_requests](#input\_dns\_allow\_remote\_requests) | Allow remote DNS requests | `bool` | `true` | no |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | Upstream DNS servers the router forwards to for every name outside the internal domain (Cloudflare) | `list(string)` | <pre>[<br/>  "1.1.1.1",<br/>  "1.0.0.1"<br/>]</pre> | no |
 | <a name="input_identity"></a> [identity](#input\_identity) | Router identity (hostname) | `string` | `"MikroTik"` | no |
-| <a name="input_internal_dns"></a> [internal\_dns](#input\_internal\_dns) | Internal domain and the bind9 servers that hold its zones (homelab-proxmox, CT 115 and CT 119). The router forwards the domain and the LAN's reverse zone to them | <pre>object({<br/>    domain  = string<br/>    servers = list(string)<br/>  })</pre> | <pre>{<br/>  "domain": "homelab.local",<br/>  "servers": [<br/>    "192.168.1.115",<br/>    "192.168.1.119"<br/>  ]<br/>}</pre> | no |
+| <a name="input_internal_dns"></a> [internal\_dns](#input\_internal\_dns) | Internal domain and where the router forwards it and the LAN's reverse zone: the floating IP keepalived keeps on whichever bind9 is up (homelab-proxmox var.bind9\_vip, CT 115 and CT 119). One IP, because a forwarder uses its servers round-robin and keeps asking a dead one | <pre>object({<br/>    domain  = string<br/>    servers = list(string)<br/>  })</pre> | <pre>{<br/>  "domain": "homelab.local",<br/>  "servers": [<br/>    "192.168.1.153"<br/>  ]<br/>}</pre> | no |
 | <a name="input_lan"></a> [lan](#input\_lan) | LAN configuration | <pre>object({<br/>    bridge_name  = string<br/>    cidr         = string<br/>    gateway      = string<br/>    bridge_ports = list(string)<br/>  })</pre> | n/a | yes |
 | <a name="input_mikrotik"></a> [mikrotik](#input\_mikrotik) | MikroTik connection configuration | <pre>object({<br/>    host     = string<br/>    username = string<br/>    password = string<br/>    insecure = bool<br/>  })</pre> | n/a | yes |
 | <a name="input_proxmox_port"></a> [proxmox\_port](#input\_proxmox\_port) | Proxmox port | `number` | `8006` | no |

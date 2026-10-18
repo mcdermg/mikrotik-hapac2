@@ -28,7 +28,7 @@ This is an OpenTofu project for managing a MikroTik RBD52G-5HacD2HnD router (Rou
 | `.2`–`.9` | Network gear (spare) |
 | `.10`–`.49` | k8s LoadBalancer pool (MetalLB) |
 | `.50`–`.99` | DHCP pool |
-| `.100`–`.199` | LXCs (VMID = last octet) |
+| `.100`–`.199` | LXCs (VMID = last octet), except `.153`: the bind9 floating DNS IP (keepalived) |
 | `.200`–`.239` | k3s VMs (VMID = last octet) |
 | `.240`–`.248` | Pis and other physical hosts |
 | `.249` | MikroTik ISP monitor container |

@@ -73,14 +73,14 @@ variable "dns_servers" {
 }
 
 variable "internal_dns" {
-  description = "Internal domain and the bind9 servers that hold its zones (homelab-proxmox, CT 115 and CT 119). The router forwards the domain and the LAN's reverse zone to them"
+  description = "Internal domain and where the router forwards it and the LAN's reverse zone: the floating IP keepalived keeps on whichever bind9 is up (homelab-proxmox var.bind9_vip, CT 115 and CT 119). One IP, because a forwarder uses its servers round-robin and keeps asking a dead one"
   type = object({
     domain  = string
     servers = list(string)
   })
   default = {
     domain  = "homelab.local"
-    servers = ["192.168.1.115", "192.168.1.119"]
+    servers = ["192.168.1.153"]
   }
 }
 

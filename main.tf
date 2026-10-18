@@ -93,7 +93,7 @@ resource "routeros_ip_dns" "dns_settings" {
   allow_remote_requests = var.dns_allow_remote_requests
 }
 
-# Internal names go to the bind9 pair (used round-robin), everything else to var.dns_servers
+# Internal names go to bind9 through its floating IP, everything else to var.dns_servers
 resource "routeros_ip_dns_forwarders" "internal" {
   name        = "internal"
   dns_servers = var.internal_dns.servers
