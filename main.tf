@@ -88,9 +88,23 @@ resource "routeros_ip_route" "default_route" {
 }
 
 # DNS CONFIGURATION
+# Root CA of Cloudflare Gateway's DoH certificate (Google Trust Services, from pki.goog), so the router can verify it
+resource "routeros_system_certificate" "gts_root_r4" {
+  name        = "gts-root-r4"
+  common_name = "GTS Root R4"
+  import {
+    cert_file_content = file("${path.module}/certs/gts-root-r4.pem")
+  }
+}
+
 resource "routeros_ip_dns" "dns_settings" {
+  # Also resolves the DoH hostname itself, which RouterOS needs a plain server for
   servers               = var.dns_servers
   allow_remote_requests = var.dns_allow_remote_requests
+  use_doh_server        = var.dns_doh_server
+  verify_doh_cert       = var.dns_doh_server != null
+
+  depends_on = [routeros_system_certificate.gts_root_r4]
 }
 
 # Internal names go to bind9 through its floating IP, everything else to var.dns_servers

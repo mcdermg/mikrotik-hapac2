@@ -90,6 +90,12 @@ variable "dns_allow_remote_requests" {
   default     = true
 }
 
+variable "dns_doh_server" {
+  description = "DoH URL for upstream queries: the Cloudflare Gateway Home location (homelab-proxmox: tf output -raw gateway_doh_url), which blocks ads. null keeps plain DNS to dns_servers"
+  type        = string
+  default     = null
+}
+
 # DHCP CONFIGURATION
 variable "dhcp" {
   description = "DHCP configuration"
