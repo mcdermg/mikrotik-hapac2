@@ -152,6 +152,7 @@ No modules.
 | [routeros_ip_service.disabled_services](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/ip_service) | resource |
 | [routeros_move_items.firewall_order](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/move_items) | resource |
 | [routeros_snmp.snmp_settings](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/snmp) | resource |
+| [routeros_system_certificate.gts_root_r4](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_certificate) | resource |
 | [routeros_system_clock.timezone](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_clock) | resource |
 | [routeros_system_identity.identity](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_identity) | resource |
 | [routeros_system_user_sshkeys.ssh_keys](https://registry.terraform.io/providers/terraform-routeros/routeros/1.99.1/docs/resources/system_user_sshkeys) | resource |
@@ -168,6 +169,7 @@ No modules.
 | <a name="input_dhcp"></a> [dhcp](#input\_dhcp) | DHCP configuration | <pre>object({<br/>    pool_name   = string<br/>    pool_start  = string<br/>    pool_end    = string<br/>    server_name = string<br/>  })</pre> | n/a | yes |
 | <a name="input_dhcp_dynamic_lease_identifiers"></a> [dhcp\_dynamic\_lease\_identifiers](#input\_dhcp\_dynamic\_lease\_identifiers) | Client identifiers the DHCP server uses to match dynamic leases | `string` | `"client-mac,client-id"` | no |
 | <a name="input_dns_allow_remote_requests"></a> [dns\_allow\_remote\_requests](#input\_dns\_allow\_remote\_requests) | Allow remote DNS requests | `bool` | `true` | no |
+| <a name="input_dns_doh_server"></a> [dns\_doh\_server](#input\_dns\_doh\_server) | DoH URL for upstream queries: the Cloudflare Gateway Home location (homelab-proxmox: tf output -raw gateway\_doh\_url), which blocks ads. null keeps plain DNS to dns\_servers | `string` | `null` | no |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | Upstream DNS servers the router forwards to for every name outside the internal domain (Cloudflare) | `list(string)` | <pre>[<br/>  "1.1.1.1",<br/>  "1.0.0.1"<br/>]</pre> | no |
 | <a name="input_identity"></a> [identity](#input\_identity) | Router identity (hostname) | `string` | `"MikroTik"` | no |
 | <a name="input_internal_dns"></a> [internal\_dns](#input\_internal\_dns) | Internal domain and where the router forwards it and the LAN's reverse zone: the floating IP keepalived keeps on whichever bind9 is up (homelab-proxmox var.bind9\_vip, CT 115 and CT 119). One IP, because a forwarder uses its servers round-robin and keeps asking a dead one | <pre>object({<br/>    domain  = string<br/>    servers = list(string)<br/>  })</pre> | <pre>{<br/>  "domain": "homelab.local",<br/>  "servers": [<br/>    "192.168.1.153"<br/>  ]<br/>}</pre> | no |
