@@ -212,3 +212,14 @@ variable "proxmox_port" {
   type        = number
   default     = 8006
 }
+
+# MKTXP MONITORING USER
+variable "mktxp" {
+  description = "Read-only API user the mktxp exporter in k3s logs in with (LAB-158). address limits where it can log in from: the k3s nodes' range (VMs .210-.220, Pis .241-.242)"
+  type = object({
+    username = optional(string, "mktxp")
+    password = string
+    address  = optional(string, "192.168.1.192/26")
+  })
+  sensitive = true
+}
