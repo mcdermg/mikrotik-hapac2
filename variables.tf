@@ -160,14 +160,12 @@ variable "services_to_disable" {
       port    = 80
       comment = "HTTP web service"
     }
-    #api = {
-    #  port    = 8728
-    #  comment = "RouterOS API"
-    #}
-    #api_ssl = {
-    #  port    = 8729
-    #  comment = "RouterOS API-SSL"
-    #}
+    # api (8728) stays on: OpenTofu connects through it, and so does mktxp in k3s (LAB-158)
+    # Nothing uses api-ssl, so it's off (LAB-158)
+    "api-ssl" = {
+      port    = 8729
+      comment = "RouterOS API-SSL"
+    }
   }
 }
 
