@@ -44,6 +44,21 @@ resource "routeros_system_user_sshkeys" "ssh_keys" {
   comment  = each.key
 }
 
+# Read-only API login for the mktxp exporter in k3s (LAB-158): api and read only, and only from the k3s nodes' range
+resource "routeros_system_user_group" "mktxp" {
+  name    = "mktxp"
+  policy  = ["api", "read"]
+  comment = "mktxp exporter in k3s, read-only API"
+}
+
+resource "routeros_system_user" "mktxp" {
+  name     = var.mktxp.username
+  group    = routeros_system_user_group.mktxp.name
+  password = var.mktxp.password
+  address  = var.mktxp.address
+  comment  = "mktxp exporter in k3s"
+}
+
 # Note: Disabling admin user should be done manually after verifying gary user works
 # resource "routeros_user" "admin_disabled" {
 #   name     = "admin"
