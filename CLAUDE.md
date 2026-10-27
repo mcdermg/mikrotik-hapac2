@@ -17,7 +17,7 @@ This is an OpenTofu project for managing a MikroTik RBD52G-5HacD2HnD router (Rou
 - **Skull Canyon NUC**: `192.168.1.251` - Proxmox node pve02
 - **Raspberry Pi 4**: `192.168.1.241`
 - **Raspberry Pi 3**: `192.168.1.242`
-- **Raspberry Pi Zero**: `192.168.0.62` - Gatus ISP monitoring and Proxmox QDevice (on WAN side)
+- **Raspberry Pi 3 (monitoring)**: `192.168.0.62` - Gatus ISP monitoring and Proxmox QDevice (on WAN side)
 - **ISP Monitor Container**: `192.168.1.249` - Blackbox Exporter
 - **TP-Link Switch**: `192.168.1.254`
 
@@ -279,8 +279,8 @@ services_to_disable = {
 
 ### With Monitoring
 - Blackbox Exporter in the ISP monitor container at `192.168.1.249:9115`
-- RPi Zero at `192.168.0.62` for ISP-side monitoring
-- The Zero reaches Blackbox through its `trusted_devices` forward rule; there is no separate Blackbox rule
+- Raspberry Pi 3 (monitoring) at `192.168.0.62` for ISP-side monitoring
+- The monitoring Pi reaches Blackbox through its `trusted_devices` forward rule; there is no separate Blackbox rule
 
 ## User Preferences
 
